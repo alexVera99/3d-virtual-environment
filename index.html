@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" media="all" href="styles/style.css" />
+        <title>Chat 2D</title>
+    </head>
+    <body>
+        
+
+        <div class="container" style="display: none;">
+            <div class="change-room" style="display: none;">
+                <p style = "color: white;"></p>
+                <button class = "yesButton" value ="yes">yes</button>
+                <button  value = "no" >no</button>
+            </div>
+            <div class="canvas-container">
+            <canvas class="canvas" style="display: none;"></canvas>
+            </div>
+            <button class="open-button" value = "open" >Chat</button>
+            <div class="chat" style=" display: none;">
+                <button type="button" value ="close" class="cancelbtn">Close</button>
+                
+                <input type="text" class="chat-input" placeholder="Type a message...">
+                <button id="send-btn" value="send-msg">Send</button>
+            </div>
+        </div>     
+
+        <div id ="user_data_form">
+            <div class= "welcome">
+                <h1>WELCOME to MOONSCAPE!</h1><br>
+                <div class = "logButtons">
+                    <button onclick="document.getElementById('logIn').style.display='block'" >Login</button><br>
+                    <button onclick="document.getElementById('signUp').style.display='block'">Sign Up</button>    
+                </div>
+            </div>
+           
+           
+            <div id="logIn" class="modal">
+            
+                <form class="modal-content animate" >
+                    <div class="log-container">
+                        <b>Username</b>
+                        <input type="text" class= "log" placeholder="Enter Username" required>
+
+                        <b>Password</b>
+                        <input type="password" placeholder="Enter Password" name="psw" required>
+                            
+                        <button class="btn" id = "log-in">Login</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="signUp" class="modal">
+                <form class="modal-content animate" >
+                    <div class="log-container">
+                        <b>Username</b>
+                        <input type="text" class="log" placeholder="Enter Username" id = "username" required>
+
+                        <b>Password</b>
+                        <input type="password" placeholder="Enter Password" name="psw" required>
+
+                        <b>Repeat Password</b>
+                        <input type="password" placeholder="Repeat Password" name="psw" required>
+
+                        <b>Avatar</b><br>
+                        <div class="avatars">
+                            
+                        </div>   
+                        <button class="btn" id="sign-up">Sign Up</button>
+                        
+                    </div>
+                   
+                </form>
+            </div>            
+            
+        </div>
+
+<script>
+// Get the modal
+var logIn = document.getElementById('logIn');
+var signUp = document.getElementById('signUp');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == logIn || event.target == signUp) {
+        logIn.style.display = "none";
+        signUp.style.display = "none";
+    }
+}
+
+</script>
+    
+    </body>
+    <script src="http://localhost:8081/client.js"></script>
+    <script type="module" src="src/main.js"></script>
+
+</html>

@@ -1,0 +1,43 @@
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  NODE_VERSION: '18.13.0'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Copy deployment code
+      run: |
+        mkdir deployment
+        cp -rf imgs deployment
+        cp -rf src deployment
+        cp -rf package* deployment
+        cp -rf styles deployment
+        cp -rf index.html deployment
+    
+    - name: Install sshpass
+      run: |
+        sudo apt-get install sshpass
+
+    - name: 'Deploy to UPF server'
+      run: |
+        sshpass -p ${{ secrets.SERVER_PASS }} scp -r -o StrictHostKeyChecking=no ./deployment/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_URL }}:${{ secrets.SERVER_DEPLOY_PATH }}
+
+    - name: npm install
+      run: |
+        sshpass -p ${{ secrets.SERVER_PASS }} ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_URL }} 'cd ${{ secrets.SERVER_DEPLOY_PATH }}; npm install'

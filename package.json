@@ -1,0 +1,26 @@
+{
+  "name": "2d-virtual-environment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexVera99/2d-virtual-environment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexVera99/2d-virtual-environment/issues"
+  },
+  "homepage": "https://github.com/alexVera99/2d-virtual-environment#readme",
+  "dependencies": {
+    "unit.js": "^2.1.1"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0"
+  }
+}
