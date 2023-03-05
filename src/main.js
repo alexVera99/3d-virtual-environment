@@ -24,7 +24,7 @@ var canvas = document.querySelector("canvas");
 
 var app = null;
 
-var mouse_pos = [0,0];
+var mouse_pos = [0, 0];
 
 var last = performance.now();
 
@@ -33,74 +33,29 @@ fillFormButton.addEventListener("click", onUserFillForm);
 
 function onUserFillForm() {
     var user = chatUIHelper.sendUserInfoToWorld();
-    chat.sendUserData(user);
+    //chat.sendUserData(user);
 
     var serverSync = new ServerSynchronizer(chat);
-    
+
     // Create app with the user data
     app = new App(canvas, chat, world, serverSync);
 
     // Callbacks
-    document.body.addEventListener("mousedown", onMouse);
-    document.body.addEventListener("mousemove", onMouse);
-    document.body.addEventListener("mouseup", onMouse);
     document.querySelector(".chat-input").addEventListener("keydown", onKeydown);
     var buttons = document.querySelectorAll("button")
-    for(var i = 0; i<buttons.length; i++){
-        buttons[i].addEventListener("click",onButton);
-    }
-}
-
-function loop(){
-    var isAppNotInitialized = app == null;
-    if(isAppNotInitialized) {
-        requestAnimationFrame(loop);
-        return;
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", onButton);
     }
 
-    draw();
-
-    var now = performance.now();
-
-    var elapsed_t = (now - last )/1000;
-
-    last = now; 
-
-    update(elapsed_t);
-
-    requestAnimationFrame(loop);
+    app.start();
 }
 
-function draw(){
-    var parent = canvas.parentNode;
-	var rect = parent.getBoundingClientRect();
-	canvas.width = rect.width;
-	canvas.height = rect.height;
-
-    var ctx = canvas.getContext('2d');
-
-    app.draw(ctx);
-}
-
-function update(dt){
-    app.update(dt);
-
-}
-
-function onMouse(e){
-    var rect = canvas.getBoundingClientRect();
-    var cx = mouse_pos[0] = e.clientX - rect.left;
-    var cy = mouse_pos[1] =  e.clientY - rect.top;
-    var mouse_buttons = e.buttons;
-
-    app.onMouse(e,mouse_pos);
+function onButton(e) {
+    app.onButton(e);
 }
 
 function onKeydown(e){
     app.onKeydown(e);
-}
-function onButton(e){
-    app.onButton(e);
 }
 
 chat.on_ready_server = (data) => {
@@ -108,5 +63,3 @@ chat.on_ready_server = (data) => {
     dataLoader.loadDataFromServer(data);
     chatUIHelper.showAvatar();
 };
-
-loop();

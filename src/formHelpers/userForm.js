@@ -55,14 +55,37 @@ export class UserFormUIHelper {
 
         var user = new User();
         user.fromJSON({
-            user_id: user_id,
-            username: username,
-            room_id: room_id,
-            avatar: avatar,
-            facing: avatar.facing_front,
-            animation: "idle_frames",
-            position: 0,
-            target_position: 0
+            "user_id": 1,
+            "username": "pepe",
+            "room_id": 1,
+            "scene_node": {
+                "id": 1,
+                "mesh_uri": "girl/girl.wbin",
+                "material": {
+                    "id": 1,
+                    "name": "girl",
+                    "uri": "girl/girl.png"
+                },
+                "scale": 0.3,
+                "animations": [
+                    {
+                        "id": 1,
+                        "name": "idle",
+                        "uri": "data/girl/idle.skanim"
+                    },
+                    {
+                        "id": 2,
+                        "name": "walking",
+                        "uri": "data/girl/walking.skanim"
+                    },
+                    {
+                        "id": 3,
+                        "name": "dance",
+                        "uri": "data/girl/dance.skanim"
+                    }
+                ],
+                "position": [-40, 0, 0]
+            }
         })
 
         this.world.addUser(user, room_id);

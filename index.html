@@ -17,7 +17,7 @@
                 <button  value = "no" >no</button>
             </div>
             <div class="canvas-container">
-            <canvas class="canvas" style="display: none;"></canvas>
+            <div class="canvas" id="canvas"></div>
             </div>
             <button class="open-button" value = "open" >Chat</button>
             <div class="chat" style=" display: none;">
@@ -94,6 +94,10 @@ window.onclick = function(event) {
 </script>
     
     </body>
+    <script type="text/javascript" src="src/extra/gl-matrix-min.js"></script>
+	<script type="text/javascript" src="src/extra/litegl.js"></script>
+	<script type="text/javascript" src="src/extra/rendeer.js"></script>
+	<script type="text/javascript" src="src/extra/wbin.js"></script>
     <script src="http://localhost:8081/client.js"></script>
     <script type="module" src="src/main.js"></script>
 
