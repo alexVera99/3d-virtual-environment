@@ -6,6 +6,7 @@ export class Renderer {
     cur_user_character;
     context;
     dom_canvas;
+    users_charaters;
 
     constructor(bg_color) {
         this.scene = new RD.Scene();
@@ -13,7 +14,7 @@ export class Renderer {
         this.bg_color = bg_color || [0.1,0.1,0.1,1];
     }
 
-    init() {
+    init(users) {
         this.context = GL.create({width: window.innerWidth, height:window.innerHeight});
 
         //setup renderer
@@ -28,12 +29,61 @@ export class Renderer {
         // Set up camera
         this.camera.perspective( 60, gl.canvas.width / gl.canvas.height, 0.1, 1000 );
 	    this.camera.lookAt( [0,40,100],[0,20,0],[0,1,0] );
+        
+        users.forEach(user => {
+            let user_scene_node = user.scene_node;
+            let user_material = user_scene_node.material;
+            let user_animations = user.scene_node.animations;
+
+            var mat = new RD.Material({
+                textures: {
+                    color: user_material.color_texture
+                }
+            })
+            mat.register(user_material.name);
+
+            var pivot = new RD.SceneNode({
+                position: user_scene_node.position
+            });
+
+            var scene_node = new RD.SceneNode({
+                scaling: user_scene_node.scale,
+                mesh: user_scene_node.mesh_uri,
+                material: user_material.name
+            });
+
+            pivot.addChild(scene_node);
+
+            scene_node.skeleton = new RD.Skeleton();
+
+            let animations = new Object();
+            user_animations.forEach(anim => {
+                animations[anim.name] = this.loadAnimation(anim.uri);
+            });
+
+            pivot.animations = animations;
+
+            if(user.isCurrUser){
+                this.cur_user_character = pivot;
+            }
+            this.scene.root.addChild(pivot);
+
+
+        });
+
 
         this.context.ondraw = function(){
             gl.canvas.width = this.dom_canvas.offsetWidth;
             gl.canvas.height = this.dom_canvas.offsetHeight;
             gl.viewport(0,0,gl.canvas.width,gl.canvas.height);
-    
+
+            var usrpos = this.cur_user_character.localToGlobal([0,40,0]);
+            var campos = this.cur_user_character.localToGlobal([0,50,-70]);
+            var camtarget = this.cur_user_character.localToGlobal([0, 20, 70]); 
+            var smoothtarget = vec3.lerp(vec3.create(), this.camera.target, camtarget, 0.05);
+            
+            this.camera.perspective( 60, gl.canvas.width / gl.canvas.height, 0.1, 1000 );
+	        this.camera.lookAt(campos,smoothtarget,[0,1,0] );
             //clear
             this.renderer.clear(this.bg_color);
             //render scene
@@ -49,8 +99,8 @@ export class Renderer {
     
             sceneNodes.forEach((sceneNode) => {
                 var t = getTime();
-
-                let animations = sceneNode.animations
+                //var sceneNode = this.cur_user_character;
+                let animations = sceneNode.animations;
 
                 let isNotCharacter = !animations;
                 if(isNotCharacter){
@@ -61,20 +111,20 @@ export class Renderer {
                 var time_factor = 1;
         
                 //control with keys
-                if(gl.keys["UP"])
+                if(gl.keys["UP"] && sceneNode == this.cur_user_character)
                 {
                     sceneNode.moveLocal([0,0,1]);
                     anim = animations.walking;
                 }
-                else if(gl.keys["DOWN"])
+                else if(gl.keys["DOWN"]&& sceneNode == this.cur_user_character)
                 {
                     sceneNode.moveLocal([0,0,-1]);
                     anim = animations.walking;
                     time_factor = -1;
                 }
-                if(gl.keys["LEFT"])
+                if(gl.keys["LEFT"] && sceneNode == this.cur_user_character)
                     sceneNode.rotate(90*DEG2RAD*dt,[0,1,0]);
-                else if(gl.keys["RIGHT"])
+                else if(gl.keys["RIGHT"] && sceneNode == this.cur_user_character)
                     sceneNode.rotate(-90*DEG2RAD*dt,[0,1,0]);
         
                 //move bones in the skeleton based on animation
@@ -129,7 +179,7 @@ export class Renderer {
 		anim.load(url);
 		return anim;
 	}
-
+    /*
     setUpUserSceneNodes(users) {
         users.forEach(user => {
             let user_scene_node = user.scene_node;
@@ -166,7 +216,7 @@ export class Renderer {
 
             this.scene.root.addChild(pivot);
         });
-    }
+    }*/
 
     setUpRoom(room) {
         var room_scene_node = new RD.SceneNode({

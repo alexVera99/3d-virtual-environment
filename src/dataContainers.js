@@ -86,6 +86,7 @@ export class SceneNode {
 export class User {
     constructor(username) {
         this.user_id = null;
+        this.isCurrUser = null;
         this.username = username || "";
         this.room_id = null; //room name
         this.scene_node;
@@ -93,6 +94,7 @@ export class User {
 
     fromJSON(data) {
         this.user_id = data["user_id"];
+        this.isCurrUser = data["isCurrUser"]
         this.username = data["username"];
         this.room_id = data["room_id"];
         this.scene_node = new SceneNode();

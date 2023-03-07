@@ -41,7 +41,7 @@ function onUserFillForm() {
     app = new App(canvas, chat, world, serverSync);
 
     // Callbacks
-    document.querySelector(".chat-input").addEventListener("keydown", onKeydown);
+    //document.querySelector(".chat-input").addEventListener("keydown", onKeydown);
     var buttons = document.querySelectorAll("button")
     for (var i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener("click", onButton);

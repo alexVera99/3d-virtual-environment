@@ -12,14 +12,18 @@ export default class App {
         this.serverSync = serverSync;
         this.chatHelper = new ChatUIHelper();
         this.renderer = new Renderer();
+
     }
 
     start(){
-        this.renderer.init();
+        var context = GL.create({width: window.innerWidth, height:window.innerHeight}); 
+
+        //this.renderer.init();
         //let users = this.world.users;
-        let user = new User();
-        user.fromJSON({
+        let user1 = new User();
+        user1.fromJSON({
             "user_id": 1,
+            "isCurrUser": false,
             "username": "pepe",
             "room_id": 1,
             "scene_node": {
@@ -51,10 +55,40 @@ export default class App {
                 "position": [-40, 0, 0]
             }
         })
+        let user2 = new User();
+        user2.fromJSON({
+            "user_id": 2,
+            "isCurrUser": true,
+            "username": "pepa",
+            "room_id": 1,
+            "scene_node": {
+                "id": 1,
+                "mesh_uri": "man/man.wbin",
+                "material": {
+                    "id": 1,
+                    "name": "man",
+                    "color_texture": "man/peopleColors.png"
+                },
+                "scale": 0.3,
+                "animations": [
+                    {
+                        "id": 1,
+                        "name": "idle",
+                        "uri": "data/man/idle.abin"
+                    },
+                    {
+                        "id": 2,
+                        "name": "walking",
+                        "uri": "data/man/walking.abin"
+                    }
+                ],
+                "position": [-10, 0, 0]
+            }
+        })
 
-        let users = [user];
-
-        this.renderer.setUpUserSceneNodes(users);
+        let users = [user1, user2];
+        this.renderer.init(users);
+        //this.renderer.setUpUserSceneNodes(users);
 
         // HARDCODED :(
         let room = new Room();
@@ -64,6 +98,7 @@ export default class App {
             "users": {
                 "1": {
                     "user_id": 1,
+                    "isCurrUser": false,
                     "username": "pepe",
                     "room_id": 1,
                     "scene_node": {
@@ -93,6 +128,36 @@ export default class App {
                             }
                         ],
                         "position": [-40, 0, 0]
+                    },
+                    "2": {
+                        "user_id": 2,
+                        "isCurrUser": true,
+                        "username": "pepa",
+                        "room_id": 1,
+                        "scene_node": {
+                            "id": 1,
+                            "mesh_uri": "man/man.wbin",
+                            "material": {
+                                "id": 1,
+                                "name": "man",
+                                "color_texture": "man/peopleColors.png"
+                            },
+                            "scale": 0.3,
+                            "animations": [
+                                {
+                                    "id": 1,
+                                    "name": "idle",
+                                    "uri": "data/man/idle.abin"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "walking",
+                                    "uri": "data/man/walking.abin"
+                                },
+                                
+                            ],
+                            "position": [-10, 0, 0]
+                        }
                     }
                 }
             },
@@ -106,7 +171,7 @@ export default class App {
     }
 
     onButton(e) {
-
+        /*
         var value = e.target.value;
         if (value === "no") {
             this.showOptions(false);
@@ -148,7 +213,7 @@ export default class App {
                 this.chat.sendMessage(curr_user, curr_room.room_id,  msg);
             }
             
-		}
+		}*/
     }
 
     update(dt) {
@@ -160,9 +225,9 @@ export default class App {
             return;
         }
         //UserStateUpdater.updateUserPosition(curr_user, curr_room, dt);
-        UserStateUpdater.updateAllUsersPosition(users, curr_room, dt);
-        var img = this.world.imageManager.loadImage(curr_room.image_uri);
-
+        //UserStateUpdater.updateAllUsersPosition(users, curr_room, dt);
+        //var img = this.world.imageManager.loadImage(curr_room.image_uri);
+        /*
         for(var i = 0; i<curr_room.exits.length; i++){
             var epos = curr_room.exits[i].position;
             var eheight = curr_room.exits[i].height;
@@ -174,7 +239,7 @@ export default class App {
                 break;
                 
             }
-        }
+        }*/
     }
 
     showOptions(show){

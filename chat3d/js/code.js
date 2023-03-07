@@ -77,7 +77,6 @@ function init()
 	//main draw function
 	context.ondraw = function(){
 		camera.perspective( 60, gl.canvas.width / gl.canvas.height, 0.1, 1000 );
-
 		gl.canvas.width = document.body.offsetWidth;
 		gl.canvas.height = document.body.offsetHeight;
 		gl.viewport(0,0,gl.canvas.width,gl.canvas.height);

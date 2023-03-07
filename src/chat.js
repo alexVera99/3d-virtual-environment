@@ -57,7 +57,7 @@ export class Chat {
         if(this.on_ready_server){
             this.on_ready_server(data);
         }
-
+        /*
         //create the chats for each room
         var chat = document.querySelector(".chat");
         var input = document.querySelector(".chat-input");
@@ -74,7 +74,7 @@ export class Chat {
             }
             chat.insertBefore(room_msgs,input);
         });
-       
+        */
         
     }
     sendMessageToServer(message) {
