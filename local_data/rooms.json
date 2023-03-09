@@ -1,0 +1,43 @@
+[
+    {
+        "room_id": 1,
+        "room_name": "super room",
+        "users": {
+            "1": {
+                "user_id": 1,
+                "username": "pepe",
+                "room_id": 1,
+                "scene_node": {
+                    "id": 1,
+                    "mesh_uri": "girl/girl.wbin",
+                    "material": {
+                        "id": 1,
+                        "name": "girl",
+                        "uri": "girl/girl.png"
+                    },
+                    "scale": 0.3,
+                    "animations": [
+                        {
+                            "id": 1,
+                            "name": "idle",
+                            "uri": "data/girl/idle.skanim"
+                        },
+                        {
+                            "id": 2,
+                            "name": "walking",
+                            "uri": "data/girl/walking.skanim"
+                        },
+                        {
+                            "id": 3,
+                            "name": "dance",
+                            "uri": "data/girl/dance.skanim"
+                        }
+                    ],
+                    "position": [-40, 0, 0]
+                }
+            }
+        },
+        "scale": 40,
+        "gltf_uri": "data/room.gltf"
+    }
+]
