@@ -20,13 +20,7 @@ chat.on_user_update_room = dataLoader.updateUserRoom.bind(dataLoader);
 
 var chatUIHelper = new UserFormUIHelper(world);
 
-var canvas = document.querySelector("canvas");
-
 var app = null;
-
-var mouse_pos = [0, 0];
-
-var last = performance.now();
 
 var fillFormButton = document.querySelector("#sign-up");
 fillFormButton.addEventListener("click", onUserFillForm);
@@ -38,23 +32,9 @@ function onUserFillForm() {
     var serverSync = new ServerSynchronizer(chat);
 
     // Create app with the user data
-    app = new App(canvas, chat, world, serverSync);
-
-    // Callbacks
-    var buttons = document.querySelectorAll("button")
-    for (var i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", onButton);
-    }
+    app = new App(chat, world, serverSync);
 
     app.start();
-}
-
-function onButton(e) {
-    app.onButton(e);
-}
-
-function onKeydown(e){
-    app.onKeydown(e);
 }
 
 chat.on_ready_server = (data) => {

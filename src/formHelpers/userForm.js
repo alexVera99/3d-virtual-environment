@@ -53,6 +53,7 @@ export class UserFormUIHelper {
 
         var user_id = this.world.currentUserId;
 
+        // SWEET LORD.... HARDCODED.......!!!!!!!!!!
         var user = new User();
         user.fromJSON({
             "user_id": 1,

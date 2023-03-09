@@ -5,7 +5,7 @@ import { Renderer } from "./renderer.js";
 import {UserStateUpdater} from "./userLogic.js";
 
 export default class App {
-    constructor(canvas, chat, world, serverSync) {
+    constructor(chat, world, serverSync) {
         this.world = world;
         this.drawer = new Drawer();
         this.chat = chat;
