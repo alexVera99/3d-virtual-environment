@@ -18,7 +18,7 @@ export default class App {
     start(){
         var context = GL.create({width: window.innerWidth, height:window.innerHeight}); 
 
-        //this.renderer.init();
+        this.renderer.init();
         //let users = this.world.users;
         let user1 = new User();
         user1.fromJSON({
@@ -87,8 +87,7 @@ export default class App {
         })
 
         let users = [user1, user2];
-        this.renderer.init(users);
-        //this.renderer.setUpUserSceneNodes(users);
+        this.renderer.setUpUserSceneNodes(users);
 
         // HARDCODED :(
         let room = new Room();

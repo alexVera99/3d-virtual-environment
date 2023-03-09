@@ -14,7 +14,7 @@ export class Renderer {
         this.bg_color = bg_color || [0.1,0.1,0.1,1];
     }
 
-    init(users) {
+    init() {
         this.context = GL.create({width: window.innerWidth, height:window.innerHeight});
 
         //setup renderer
@@ -29,48 +29,6 @@ export class Renderer {
         // Set up camera
         this.camera.perspective( 60, gl.canvas.width / gl.canvas.height, 0.1, 1000 );
 	    this.camera.lookAt( [0,40,100],[0,20,0],[0,1,0] );
-        
-        users.forEach(user => {
-            let user_scene_node = user.scene_node;
-            let user_material = user_scene_node.material;
-            let user_animations = user.scene_node.animations;
-
-            var mat = new RD.Material({
-                textures: {
-                    color: user_material.color_texture
-                }
-            })
-            mat.register(user_material.name);
-
-            var pivot = new RD.SceneNode({
-                position: user_scene_node.position
-            });
-
-            var scene_node = new RD.SceneNode({
-                scaling: user_scene_node.scale,
-                mesh: user_scene_node.mesh_uri,
-                material: user_material.name
-            });
-
-            pivot.addChild(scene_node);
-
-            scene_node.skeleton = new RD.Skeleton();
-
-            let animations = new Object();
-            user_animations.forEach(anim => {
-                animations[anim.name] = this.loadAnimation(anim.uri);
-            });
-
-            pivot.animations = animations;
-
-            if(user.isCurrUser){
-                this.cur_user_character = pivot;
-            }
-            this.scene.root.addChild(pivot);
-
-
-        });
-
 
         this.context.ondraw = function(){
             gl.canvas.width = this.dom_canvas.offsetWidth;
@@ -179,7 +137,7 @@ export class Renderer {
 		anim.load(url);
 		return anim;
 	}
-    /*
+
     setUpUserSceneNodes(users) {
         users.forEach(user => {
             let user_scene_node = user.scene_node;
@@ -202,7 +160,9 @@ export class Renderer {
                 mesh: user_scene_node.mesh_uri,
                 material: user_material.name
             });
-            
+
+            pivot.addChild(scene_node);
+
             scene_node.skeleton = new RD.Skeleton();
 
             let animations = new Object();
@@ -212,11 +172,12 @@ export class Renderer {
 
             pivot.animations = animations;
 
-            pivot.addChild(scene_node);
-
+            if(user.isCurrUser){
+                this.cur_user_character = pivot;
+            }
             this.scene.root.addChild(pivot);
         });
-    }*/
+    }
 
     setUpRoom(room) {
         var room_scene_node = new RD.SceneNode({
