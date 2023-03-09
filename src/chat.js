@@ -42,40 +42,36 @@ export class Chat {
         this.server.connect( this.serverURL, this.room);
 
         this.server.on_ready = this.onReadyServer.bind(this);
+        this.server.on_init_data = this.onInitData.bind(this);
         this.server.on_message = this.onMessageServer.bind(this);
         this.server.on_user_connected = this.onUserConnected.bind(this);
         this.server.on_user_disconnected = this.onUserDisconnected.bind(this);
         this.server.on_room_info = this.onRoomInfo.bind(this);
     }
     onReadyServer(data) {
-        // Use a callback to call it from the app and get the user id and the room information
+        // Send token to the server
+        // HARCODED TOKEN!!!!! PLEASE, CHANGE THIS!!!!!!!!!!!!!!!!!!
+        const token = "aab44c47-6725-4703-81c9-da13e02516cb";
+        // CHANGE!!!!!!!!!!!!!!!!!!!!!!
+
+        let payload = {
+            type: "user_request_init_data",
+            token: token,
+        }
+
+        this.sendMessageToServer(payload);
+    }
+
+    onInitData(data) {
         var data = {
             user_id: data["user_id"],
+            user: data["user"],
             rooms_data: data["rooms_data"],
             animations_data: data["animations_data"]
         }
-        if(this.on_ready_server){
-            this.on_ready_server(data);
+        if(this.on_init_data){
+            this.on_init_data(data);
         }
-        /*
-        //create the chats for each room
-        var chat = document.querySelector(".chat");
-        var input = document.querySelector(".chat-input");
-        var rooms = new Map(Object.entries(data["rooms_data"]));
-
-        rooms.forEach(room => {
-            var room_msgs = document.createElement("div");
-            room_msgs.id = "room"+room.room_id;
-            room_msgs.className = "messages";
-            if(room.room_id == 1){
-                room_msgs.style.display = "";
-            }else{
-                room_msgs.style.display = "none";
-            }
-            chat.insertBefore(room_msgs,input);
-        });
-        */
-        
     }
     sendMessageToServer(message) {
         this.server.sendMessage(message);

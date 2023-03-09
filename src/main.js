@@ -37,8 +37,8 @@ function onUserFillForm() {
     app.start();
 }
 
-chat.on_ready_server = (data) => {
-    console.log("server ready");
+chat.on_init_data = (data) => {
+    console.log("Authorized and got info");
     dataLoader.loadDataFromServer(data);
     chatUIHelper.showAvatar();
 };
