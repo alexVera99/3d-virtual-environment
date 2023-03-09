@@ -57,7 +57,6 @@ export class Renderer {
     
             sceneNodes.forEach((sceneNode) => {
                 var t = getTime();
-                //var sceneNode = this.cur_user_character;
                 let animations = sceneNode.animations;
 
                 let isNotCharacter = !animations;

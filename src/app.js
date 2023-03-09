@@ -16,8 +16,6 @@ export default class App {
     }
 
     start(){
-        var context = GL.create({width: window.innerWidth, height:window.innerHeight}); 
-
         this.renderer.init();
         //let users = this.world.users;
         let user1 = new User();
@@ -169,52 +167,6 @@ export default class App {
         this.renderer.startRendering()
     }
 
-    onButton(e) {
-        /*
-        var value = e.target.value;
-        if (value === "no") {
-            this.showOptions(false);
-        } else if (value == "yes") {
-            let target_room_id = parseInt(e.target.id);
-            this.chatHelper.changeRoomChat(this.world.getCurrentRoom().room_id, target_room_id);
-            this.world.changeRoom(target_room_id);
-            this.serverSync.updateUserRoom(this.world.getCurrentUser(), target_room_id);
-            this.showOptions(false);
-        } else if (value == "open") {
-            document.querySelector(".chat").style.display = "block";
-
-        } else if (value == "close") {
-            document.querySelector(".chat").style.display = "none";
-        } else if (value == "send-msg") {
-            var curr_user = this.world.getCurrentUser();
-            var curr_room = this.world.getCurrentRoom();
-            var input = document.querySelector(".chat-input");
-            var msg = input.value;
-            if (msg != "") {
-                input.value = "";
-                console.log("sending message: " + msg);
-                this.chatHelper.addMessage(curr_user.username, curr_room.room_id, msg);
-                this.chat.sendMessage(curr_user, curr_room.room_id, msg);
-            }
-        }
-    }
-
-    onKeydown(event) {
-        if (event.key === "Enter") {
-            var curr_user = this.world.getCurrentUser();
-            var curr_room = this.world.getCurrentRoom();
-            var input = document.querySelector(".chat-input");
-            var msg = input.value;
-            if(msg != "")
-            {
-                input.value = "";
-                this.chatHelper.addMessage(curr_user.username, curr_room.room_id, msg);
-                this.chat.sendMessage(curr_user, curr_room.room_id,  msg);
-            }
-            
-		}*/
-    }
-
     update(dt) {
         var curr_user = this.world.getCurrentUser();
         var curr_room = this.world.getCurrentRoom();
@@ -223,22 +175,6 @@ export default class App {
         if(userIsNull){
             return;
         }
-        //UserStateUpdater.updateUserPosition(curr_user, curr_room, dt);
-        //UserStateUpdater.updateAllUsersPosition(users, curr_room, dt);
-        //var img = this.world.imageManager.loadImage(curr_room.image_uri);
-        /*
-        for(var i = 0; i<curr_room.exits.length; i++){
-            var epos = curr_room.exits[i].position;
-            var eheight = curr_room.exits[i].height;
-            var ewidth = curr_room.exits[i].width;
-            
-            if((curr_user.position+img.width/2)>=epos[0]-10 && (curr_user.position+img.width/2)<=(epos[0]+ewidth-10)){
-                document.querySelector(".yesButton").id = curr_room.exits[i].to_room_id;
-                this.showOptions(true);
-                break;
-                
-            }
-        }*/
     }
 
     showOptions(show){
