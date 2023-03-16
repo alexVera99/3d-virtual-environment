@@ -21,18 +21,24 @@ export class DataLoader {
             this.world.addRoom(room);
         });
 
-        // Add animations to the world
-        var animations = new Map(Object.entries(data["animations_data"]));
-        console.log(data["animations_data"]);
-        animations.forEach(animation_data => {
-            if(animation_data == null) {
+        // Add users to the world
+        var users = new Map(Object.entries(data["users_data"]));
+
+        users.forEach(user_data => {
+            if(user_data == null) {
                 return;
             }
-            var animation = new Animation();
-            animation.fromJSON(animation_data);
+            const user = new User();
+            user.fromJSON(user_data);
+            const room_id = user.room_id;
+            this.world.addUser(user, room_id);
+        })
 
-            this.world.addAnimation(animation);
-        });
+        // Update current user field
+        const currUser = this.world.getCurrentUser();
+        currUser.isCurrUser = true; 
+
+        this.world.currentRoomId = currUser.room_id;
     }
 
     loadNewUser(data) {

@@ -63,7 +63,7 @@ export class SceneNode {
     position;
 
     constructor() {
-        this.animations = new Map();
+        this.animations = new Object();
     }
 
     fromJSON(data) {
@@ -73,13 +73,25 @@ export class SceneNode {
         this.material.fromJSON(data["material"]);
         
         this.scale = data["scale"];
-        data["animations"].forEach(anim_data => {
-            let anim = new Animation3D();
-            anim.fromJSON(anim_data);
-            
-            this.animations.set(anim.id, anim);
-        })
+        this.parseAnimationFromJSON(data["animations"])
         this.position = data["position"];
+    }
+
+    addAnimation(name, anim){
+        const isAnim3DInstance = anim instanceof Animation3D;
+        if(!isAnim3DInstance) {
+            throw Error("anim should be an instance of Animation3D")
+        }
+        this.animations[name] = anim;
+    } 
+
+    parseAnimationFromJSON(data) {
+        Object.entries(data).forEach(d =>  {
+            const name = d[0];
+            const anim = d[1];
+
+            this.animations[name] = anim;
+        });
     }
 }
 
@@ -92,9 +104,9 @@ export class User {
         this.scene_node;
     }
 
-    fromJSON(data) {
+    fromJSON(data, isCurrenUser = false) {
         this.user_id = data["user_id"];
-        this.isCurrUser = data["isCurrUser"]
+        this.isCurrUser = isCurrenUser;
         this.username = data["username"];
         this.room_id = data["room_id"];
         this.scene_node = new SceneNode();

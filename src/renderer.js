@@ -157,7 +157,9 @@ export class Renderer {
             scene_node.skeleton = new RD.Skeleton();
 
             let animations = new Object();
-            user_animations.forEach(anim => {
+            Object.entries(user_animations).forEach(entry => {
+                const anim = entry[1];
+
                 animations[anim.name] = this.loadAnimation(anim.uri);
             });
 

@@ -27,7 +27,6 @@ fillFormButton.addEventListener("click", onUserFillForm);
 
 function onUserFillForm() {
     var user = chatUIHelper.sendUserInfoToWorld();
-    //chat.sendUserData(user);
 
     var serverSync = new ServerSynchronizer(chat);
 
@@ -40,5 +39,5 @@ function onUserFillForm() {
 chat.on_init_data = (data) => {
     console.log("Authorized and got info");
     dataLoader.loadDataFromServer(data);
-    chatUIHelper.showAvatar();
+    //chatUIHelper.showAvatar();
 };
