@@ -1,8 +1,7 @@
-import {Chat, ChatUIHelper} from "./chat.js";
-import { Room, User } from "./dataContainers.js";
+import {ChatUIHelper} from "./chat.js";
 import {Drawer} from "./draw.js";
 import { Renderer } from "./renderer.js";
-import {UserStateUpdater} from "./userLogic.js";
+import { RendererScene } from "./rendererScene.js";
 
 export default class App {
     constructor(chat, world, serverSync) {
@@ -11,17 +10,16 @@ export default class App {
         this.chat = chat;
         this.serverSync = serverSync;
         this.chatHelper = new ChatUIHelper();
-        this.renderer = new Renderer();
-
+        this.scene = new RendererScene(this.world);
+        this.renderer = new Renderer(this.scene);
     }
 
     start(){
         this.renderer.init();
-        const room = this.world.getCurrentRoom();
-        const users = this.world.getAllUsersInRoom(room.room_id);
+     
+        this.scene.loadUserSceneNodes();
+        this.scene.loadRoom();
 
-        this.renderer.setUpUserSceneNodes(users);
-        this.renderer.setUpRoom(room);
         this.renderer.startRendering()
     }
 
