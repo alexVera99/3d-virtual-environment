@@ -2,7 +2,7 @@ import App from './app.js';
 import { Chat } from './chat.js';
 import { DataLoader } from './dataLoaders.js';
 import { World } from './dataManagers.js';
-import { LoginForm } from './formHelpers/login.js';
+import { LoginManager } from './managers/loginManager.js';
 import { RendererScene } from './rendererScene.js';
 import { ServerSynchronizer } from './sync/dataSenders.js';
 
@@ -13,10 +13,10 @@ var dataLoader = new DataLoader(world, rendererScene);
 
 var serverURL = "127.0.0.1:8081";
 
-const loginFormController = new LoginForm(serverURL);
+const loginManager = new LoginManager(serverURL);
 
 //var serverURL = "ecv-etic.upf.edu/node/9021/ws/";
-var chat = new Chat(serverURL, loginFormController);
+var chat = new Chat(serverURL, loginManager);
 chat.on_user_connected = dataLoader.loadNewUser.bind(dataLoader);
 chat.on_user_disconnected = dataLoader.updateUserDisconnected.bind(dataLoader);
 chat.on_room_info = dataLoader.loadRoomInfo.bind(dataLoader);
@@ -29,7 +29,7 @@ var loginFormButton = document.querySelector("#log-in");
 loginFormButton.addEventListener("click", onUserFillLoginForm);
 
 async function onUserFillLoginForm() {
-    await loginFormController.login();
+    await loginManager.login();
     chat.setUpServer();
 
     const serverSync = new ServerSynchronizer(chat);
