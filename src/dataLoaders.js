@@ -2,9 +2,11 @@ import {Room, Animation, User} from "./dataContainers.js";
 import { World } from "./dataManagers.js";
 
 export class DataLoader {
-    constructor(world) {
-        this.world = world || new World();
+    constructor(world, rendererScene) {
+        this.world = world;
+        this.scene = rendererScene;
     }
+
     loadDataFromServer(data) {
         // Set current user
         this.world.currentUserId = data["user_id"];
@@ -48,6 +50,7 @@ export class DataLoader {
         var room_id = user.room_id;
 
         this.world.addUser(user, room_id);
+        this.scene.loadScene();
     }
 
     loadRoomInfo(users) {
@@ -66,6 +69,7 @@ export class DataLoader {
 
     updateUserDisconnected(user_id) {
         this.world.removeUser(user_id);
+        this.scene.loadScene();
     }
 
     updateUserTargetPosition(user_id, target_position) {

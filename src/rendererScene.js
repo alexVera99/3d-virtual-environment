@@ -31,6 +31,7 @@ export class RendererScene {
     }
 
     loadUserSceneNodes() {
+        this.scene.clear();
         const room = this.world.getCurrentRoom();
         const users = this.world.getAllUsersInRoom(room.room_id);
 
@@ -85,5 +86,10 @@ export class RendererScene {
 
         room_scene_node.loadGLTF(room.gltf_uri);
         this.scene.root.addChild(room_scene_node);
+    }
+
+    loadScene() {
+        this.loadUserSceneNodes();
+        this.loadRoom();
     }
 }
