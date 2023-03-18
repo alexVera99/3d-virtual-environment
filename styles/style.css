@@ -163,6 +163,12 @@ input[class=log], input[type=password] {
   .log-container {
     padding: 16px;
   }
+
+  /* Credential errors */
+  .login-error {
+    color: #f44336;
+    display: none;
+  }
   
   span.psw {
     float: right;

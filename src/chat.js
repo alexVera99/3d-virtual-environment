@@ -34,10 +34,11 @@ export class ChatUIHelper {
 }
 
 export class Chat {
-    constructor(serverURL) {
+    constructor(serverURL, loginManager) {
         this.userId = null;
         this.serverURL = serverURL;
         this.chatHelper = new ChatUIHelper();
+        this.loginManager = loginManager;
     }
     setUpServer() {
         this.server = my_client;
@@ -51,17 +52,7 @@ export class Chat {
         this.server.on_room_info = this.onRoomInfo.bind(this);
     }
     onReadyServer(data) {
-        // Send token to the server
-        // HARCODED TOKEN!!!!! PLEASE, CHANGE THIS!!!!!!!!!!!!!!!!!!
-        let token;
-        const rand = Math.random();
-        if (rand > 0.5) {
-            token = "aab44c47-6725-4703-81c9-da13e02516c1";
-        }
-        else {
-            token = "aab44c47-6725-4703-81c9-da13e02516cb";
-        }
-        // CHANGE!!!!!!!!!!!!!!!!!!!!!!
+        const token = this.loginManager.getToken();
 
         let payload = {
             type: "user_connect_world",
