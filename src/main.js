@@ -3,10 +3,12 @@ import { Chat } from './chat.js';
 import { DataLoader } from './dataLoaders.js';
 import { World } from './dataManagers.js';
 import { UserFormUIHelper } from './formHelpers/userForm.js';
+import { RendererScene } from './rendererScene.js';
 import { ServerSynchronizer } from './sync/dataSenders.js';
 
 var world = new World();
-var dataLoader = new DataLoader(world);
+var rendererScene = new RendererScene(world);
+var dataLoader = new DataLoader(world, rendererScene);
 
 var serverURL = "localhost:8081";
 //var serverURL = "ecv-etic.upf.edu/node/9021/ws/";
@@ -27,18 +29,17 @@ fillFormButton.addEventListener("click", onUserFillForm);
 
 function onUserFillForm() {
     var user = chatUIHelper.sendUserInfoToWorld();
-    //chat.sendUserData(user);
 
     var serverSync = new ServerSynchronizer(chat);
 
     // Create app with the user data
-    app = new App(chat, world, serverSync);
+    app = new App(chat, world, serverSync, rendererScene);
 
     app.start();
 }
 
-chat.on_ready_server = (data) => {
-    console.log("server ready");
+chat.on_init_data = (data) => {
+    console.log("Authorized and got info");
     dataLoader.loadDataFromServer(data);
-    chatUIHelper.showAvatar();
+    //chatUIHelper.showAvatar();
 };

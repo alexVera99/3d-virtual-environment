@@ -2,9 +2,11 @@ import {Room, Animation, User} from "./dataContainers.js";
 import { World } from "./dataManagers.js";
 
 export class DataLoader {
-    constructor(world) {
-        this.world = world || new World();
+    constructor(world, rendererScene) {
+        this.world = world;
+        this.scene = rendererScene;
     }
+
     loadDataFromServer(data) {
         // Set current user
         this.world.currentUserId = data["user_id"];
@@ -21,18 +23,24 @@ export class DataLoader {
             this.world.addRoom(room);
         });
 
-        // Add animations to the world
-        var animations = new Map(Object.entries(data["animations_data"]));
-        console.log(data["animations_data"]);
-        animations.forEach(animation_data => {
-            if(animation_data == null) {
+        // Add users to the world
+        var users = new Map(Object.entries(data["users_data"]));
+
+        users.forEach(user_data => {
+            if(user_data == null) {
                 return;
             }
-            var animation = new Animation();
-            animation.fromJSON(animation_data);
+            const user = new User();
+            user.fromJSON(user_data);
+            const room_id = user.room_id;
+            this.world.addUser(user, room_id);
+        })
 
-            this.world.addAnimation(animation);
-        });
+        // Update current user field
+        const currUser = this.world.getCurrentUser();
+        currUser.isCurrUser = true; 
+
+        this.world.currentRoomId = currUser.room_id;
     }
 
     loadNewUser(data) {
@@ -42,6 +50,7 @@ export class DataLoader {
         var room_id = user.room_id;
 
         this.world.addUser(user, room_id);
+        this.scene.loadScene();
     }
 
     loadRoomInfo(users) {
@@ -60,6 +69,7 @@ export class DataLoader {
 
     updateUserDisconnected(user_id) {
         this.world.removeUser(user_id);
+        this.scene.loadScene();
     }
 
     updateUserTargetPosition(user_id, target_position) {

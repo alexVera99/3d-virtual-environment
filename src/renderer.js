@@ -1,15 +1,14 @@
 export class Renderer {
-    camera;
     scene;
+    camera;
     renderer;
     bg_color;
-    cur_user_character;
     context;
     dom_canvas;
     users_charaters;
 
-    constructor(bg_color) {
-        this.scene = new RD.Scene();
+    constructor(rendererScene, bg_color) {
+        this.scene = rendererScene;
         this.camera = new RD.Camera();
         this.bg_color = bg_color || [0.1, 0.1, 0.1, 1];
     }
@@ -35,9 +34,11 @@ export class Renderer {
             gl.canvas.height = this.dom_canvas.offsetHeight;
             gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-            var usrpos = this.cur_user_character.localToGlobal([0, 40, 0]);
-            var campos = this.cur_user_character.localToGlobal([0, 50, -70]);
-            var camtarget = this.cur_user_character.localToGlobal([0, 20, 70]);
+            const cur_user_character = this.scene.getCurUserCharacter();
+
+            var usrpos = cur_user_character.localToGlobal([0, 40, 0]);
+            var campos = cur_user_character.localToGlobal([0, 50, -70]);
+            var camtarget = cur_user_character.localToGlobal([0, 20, 70]);
             var smoothtarget = vec3.lerp(vec3.create(), this.camera.target, camtarget, 0.05);
 
             this.camera.perspective(60, gl.canvas.width / gl.canvas.height, 0.1, 1000);
@@ -45,14 +46,14 @@ export class Renderer {
             //clear
             this.renderer.clear(this.bg_color);
             //render scene
-            this.renderer.render(this.scene, this.camera);
+            this.renderer.render(this.scene.getScene(), this.camera);
         }.bind(this);
 
         //main update
         this.context.onupdate = function (dt) {
-            let sceneNodes = this.scene.root.getAllChildren();
+            let sceneNodes = this.scene.getAllNodes();
             //not necessary but just in case...
-            this.scene.update(dt);
+            this.scene.updateScene(dt);
 
             sceneNodes.forEach((sceneNode) => {
                 var t = getTime();
@@ -64,21 +65,23 @@ export class Renderer {
                 }
 
                 var anim = animations.idle;
-                var time_factor = 1;
+                var time_factor = 1
+
+                const cur_user_character = this.scene.getCurUserCharacter();
 
                 //control with keys
-                if (gl.keys["UP"] && sceneNode == this.cur_user_character) {
+                if (gl.keys["UP"] && sceneNode == cur_user_character) {
                     sceneNode.moveLocal([0, 0, 1]);
                     anim = animations.walking;
                 }
-                else if (gl.keys["DOWN"] && sceneNode == this.cur_user_character) {
+                else if (gl.keys["DOWN"] && sceneNode == cur_user_character) {
                     sceneNode.moveLocal([0, 0, -1]);
                     anim = animations.walking;
                     time_factor = -1;
                 }
-                if (gl.keys["LEFT"] && sceneNode == this.cur_user_character)
+                if (gl.keys["LEFT"] && sceneNode == cur_user_character)
                     sceneNode.rotate(90 * DEG2RAD * dt, [0, 1, 0]);
-                else if (gl.keys["RIGHT"] && sceneNode == this.cur_user_character)
+                else if (gl.keys["RIGHT"] && sceneNode == cur_user_character)
                     sceneNode.rotate(-90 * DEG2RAD * dt, [0, 1, 0]);
 
                 //move bones in the skeleton based on animation
@@ -121,62 +124,6 @@ export class Renderer {
         //capture mouse events
         this.context.captureMouse(true);
         this.context.captureKeys();
-    }
-
-    loadAnimation(url) {
-        var anim = new RD.SkeletalAnimation();
-        anim.load(url);
-        return anim;
-    }
-
-    setUpUserSceneNodes(users) {
-        users.forEach(user => {
-            let user_scene_node = user.scene_node;
-            let user_material = user_scene_node.material;
-            let user_animations = user.scene_node.animations;
-
-            var mat = new RD.Material({
-                textures: {
-                    color: user_material.color_texture
-                }
-            })
-            mat.register(user_material.name);
-
-            var pivot = new RD.SceneNode({
-                position: user_scene_node.position
-            });
-
-            var scene_node = new RD.SceneNode({
-                scaling: user_scene_node.scale,
-                mesh: user_scene_node.mesh_uri,
-                material: user_material.name
-            });
-
-            pivot.addChild(scene_node);
-
-            scene_node.skeleton = new RD.Skeleton();
-
-            let animations = new Object();
-            user_animations.forEach(anim => {
-                animations[anim.name] = this.loadAnimation(anim.uri);
-            });
-
-            pivot.animations = animations;
-
-            if (user.isCurrUser) {
-                this.cur_user_character = pivot;
-            }
-            this.scene.root.addChild(pivot);
-        });
-    }
-
-    setUpRoom(room) {
-        var room_scene_node = new RD.SceneNode({
-            scaling: room.scale,
-        });
-
-        room_scene_node.loadGLTF(room.gltf_uri);
-        this.scene.root.addChild(room_scene_node);
     }
 
     startRendering() {
