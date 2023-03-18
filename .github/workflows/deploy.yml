@@ -24,7 +24,7 @@ jobs:
     - name: Copy deployment code
       run: |
         mkdir deployment
-        cp -rf imgs deployment
+        cp -rf data deployment
         cp -rf src deployment
         cp -rf package* deployment
         cp -rf styles deployment
