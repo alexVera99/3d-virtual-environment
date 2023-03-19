@@ -112,6 +112,14 @@ export class User {
         this.scene_node = new SceneNode();
         this.scene_node.fromJSON(data["scene_node"]);
     }
+
+    updatePosition(position) {
+        this.scene_node.position = position;
+    }
+
+    getPosition() {
+        return this.scene_node.position;
+    }
 }
 
 export class Room {

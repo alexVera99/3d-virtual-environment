@@ -24,6 +24,31 @@ export class RendererScene {
         return this.cur_user_character;
     }
 
+    findUserNodeById(user_id) {
+        const nodes = this.getAllNodes();
+
+        let node_of_interest;
+
+        for(let i = 0; i < nodes.lenght; i++) {
+            const node = nodes[i];
+
+            const is_user_found = node.user_id == user_id;
+            if (is_user_found) {
+                node_of_interest = node;
+                break;
+            }
+        }
+    }
+
+    updateUserPosition(user_id, position) {
+        const x = position[0];
+        const y = position[1];
+        const z = position[2];
+        const position_array = [x, y, z];
+
+        this.world.updateUserPosition(user_id, position_array);
+    }
+
     loadAnimation(url) {
         var anim = new RD.SkeletalAnimation();
         anim.load(url);
@@ -48,7 +73,7 @@ export class RendererScene {
             mat.register(user_material.name);
 
             var pivot = new RD.SceneNode({
-                position: user_scene_node.position
+                position: user.getPosition()
             });
 
             var scene_node = new RD.SceneNode({
@@ -69,6 +94,7 @@ export class RendererScene {
             });
 
             pivot.animations = animations;
+            pivot.user_id = user.user_id;
 
             if (user.isCurrUser) {
                 this.cur_user_character = pivot;

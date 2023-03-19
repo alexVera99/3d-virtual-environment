@@ -51,6 +51,11 @@ export class World{
         this.animations[animation.avatar_id] = animation;
     }
 
+    updateUserPosition(user_id, position) {
+        const user = this.getUser(user_id);
+        user.updatePosition(position);
+    }
+
     removeUser(user_id) {
         var user = this.getUser(user_id);
         var room_id = user.room_id;

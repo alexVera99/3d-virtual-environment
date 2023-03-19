@@ -73,11 +73,13 @@ export class Renderer {
                 if (gl.keys["UP"] && sceneNode == cur_user_character) {
                     sceneNode.moveLocal([0, 0, 1]);
                     anim = animations.walking;
+                    this.scene.updateUserPosition(cur_user_character.user_id, sceneNode.position);
                 }
                 else if (gl.keys["DOWN"] && sceneNode == cur_user_character) {
                     sceneNode.moveLocal([0, 0, -1]);
                     anim = animations.walking;
                     time_factor = -1;
+                    this.scene.updateUserPosition(cur_user_character.user_id, sceneNode.position);
                 }
                 if (gl.keys["LEFT"] && sceneNode == cur_user_character)
                     sceneNode.rotate(90 * DEG2RAD * dt, [0, 1, 0]);
