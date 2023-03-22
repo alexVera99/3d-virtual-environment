@@ -5,13 +5,12 @@ export class ServerSynchronizer {
         this.chat = chat;
         this.world = world;
     }
-    updateUserPosition(){
+    sendUsersAttitude(){
         const user = this.world.getCurrentUser();
         const user_id = user.user_id;
         const position = user.position;
-        console.log(position);
 
-        const payload = AppProtocol.composeUpdatePositionPaylaod(user_id, position);
+        const payload = AppProtocol.composeUpdateAttitudePaylaod(user_id, position);
 
         this.chat.sendMessageToServer(payload);
     }

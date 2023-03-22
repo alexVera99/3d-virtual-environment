@@ -20,12 +20,12 @@ var chat = new Chat(serverURL, loginManager);
 chat.on_user_connected = dataLoader.loadNewUser.bind(dataLoader);
 chat.on_user_disconnected = dataLoader.updateUserDisconnected.bind(dataLoader);
 chat.on_room_info = dataLoader.loadRoomInfo.bind(dataLoader);
-chat.on_new_users_position = dataLoader.updateUsersPosition.bind(dataLoader);
+chat.on_new_users_attitude = dataLoader.updateUsersAttitude.bind(dataLoader);
 chat.on_user_update_room = dataLoader.updateUserRoom.bind(dataLoader);
 
 const serverSync = new ServerSynchronizer(chat, world);
 
-chat.on_request_user_position = serverSync.updateUserPosition.bind(serverSync);
+chat.on_request_user_attitude = serverSync.sendUsersAttitude.bind(serverSync);
 
 var app = null;
 

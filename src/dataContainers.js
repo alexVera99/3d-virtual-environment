@@ -101,6 +101,7 @@ export class User {
         this.room_id = null; //room name
         this.scene_node;
         this.position = [0.0, 0.0, 0.0];
+        this.orientation = [1.0, 0.0, 0.0];
     }
 
     fromJSON(data, isCurrenUser = false) {
@@ -111,6 +112,8 @@ export class User {
         this.scene_node = new SceneNode();
         this.scene_node.fromJSON(data["scene_node"]);
         this.position = data["position"];
+        this.orientation = data["orientation"];
+        this.current_animation = data["current_animation"];
     }
 
     updatePosition(position) {

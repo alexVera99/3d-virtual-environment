@@ -2,12 +2,12 @@ import { deepCopy } from "../utils.js";
 
 export class AppProtocol {
     static updatePositonPayload = {
-        type: "user_update_position",
+        type: "user_update_attitude",
         user_id: undefined,
         position: undefined
     }
 
-    static usersUpdatePositionType = "new_users_position";
+    static usersUpdatePositionType = "new_users_attitude";
 
     static updateRoomPayload = {
         type: "user_change_room",
@@ -23,7 +23,7 @@ export class AppProtocol {
         message: undefined
     }
 
-    static composeUpdatePositionPaylaod(user_id, position) {
+    static composeUpdateAttitudePaylaod(user_id, position) {
         const payload = deepCopy(AppProtocol.updatePositonPayload);
 
         payload.user_id = user_id;

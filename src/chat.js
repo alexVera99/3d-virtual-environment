@@ -50,8 +50,8 @@ export class Chat {
         this.server.on_user_connected = this.onUserConnected.bind(this);
         this.server.on_user_disconnected = this.onUserDisconnected.bind(this);
         this.server.on_room_info = this.onRoomInfo.bind(this);
-        this.server.on_request_user_position = this.onRequestUserPosition.bind(this);
-        this.server.on_new_users_position = this.onNewUsersPosition.bind(this);
+        this.server.on_request_user_attitude = this.onRequestUserAttitude.bind(this);
+        this.server.on_new_users_attitude = this.onNewUsersAttitude.bind(this);
     }
     onReadyServer(data) {
         let payload = {
@@ -122,19 +122,19 @@ export class Chat {
 
     }
 
-    onRequestUserPosition() {
-        if(this.on_request_user_position){
-            this.on_request_user_position();
+    onRequestUserAttitude() {
+        if(this.on_request_user_attitude){
+            this.on_request_user_attitude();
         }
     }
 
 
-    onNewUsersPosition(rooms) {
+    onNewUsersAttitude(rooms) {
         const data = AppProtocol.parseUsersUpdatePosition(rooms);
         const rooms_data = data["rooms"];
 
-        if(this.on_new_users_position) {
-            this.on_new_users_position(rooms_data);
+        if(this.on_new_users_attitude) {
+            this.on_new_users_attitude(rooms_data);
         }
     }
 }

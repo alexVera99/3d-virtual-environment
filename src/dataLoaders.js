@@ -71,7 +71,7 @@ export class DataLoader {
         this.scene.loadScene();
     }
 
-    updateUsersPosition(rooms) {
+    updateUsersAttitude(rooms) {
         const cur_user_id = this.world.getCurrentUser().user_id;
         rooms.forEach(room => {
             const room_id = room.room_id;
