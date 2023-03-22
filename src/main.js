@@ -20,8 +20,12 @@ var chat = new Chat(serverURL, loginManager);
 chat.on_user_connected = dataLoader.loadNewUser.bind(dataLoader);
 chat.on_user_disconnected = dataLoader.updateUserDisconnected.bind(dataLoader);
 chat.on_room_info = dataLoader.loadRoomInfo.bind(dataLoader);
-chat.on_user_update_position = dataLoader.updateUserTargetPosition.bind(dataLoader);
+chat.on_new_users_position = dataLoader.updateUsersPosition.bind(dataLoader);
 chat.on_user_update_room = dataLoader.updateUserRoom.bind(dataLoader);
+
+const serverSync = new ServerSynchronizer(chat, world);
+
+chat.on_request_user_position = serverSync.updateUserPosition.bind(serverSync);
 
 var app = null;
 
@@ -31,14 +35,12 @@ loginFormButton.addEventListener("click", onUserFillLoginForm);
 async function onUserFillLoginForm() {
     await loginManager.login();
     chat.setUpServer();
-
-    const serverSync = new ServerSynchronizer(chat);
-
-    app = new App(chat, world, serverSync, rendererScene);
 }
 
 chat.on_init_data = (data) => {
     console.log("Authorized and got info");
     dataLoader.loadDataFromServer(data);
+
+    app = new App(chat, world, rendererScene);
     app.start();
 };

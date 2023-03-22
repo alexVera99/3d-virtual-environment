@@ -4,8 +4,10 @@ export class AppProtocol {
     static updatePositonPayload = {
         type: "user_update_position",
         user_id: undefined,
-        target_position: undefined
+        position: undefined
     }
+
+    static usersUpdatePositionType = "new_users_position";
 
     static updateRoomPayload = {
         type: "user_change_room",
@@ -21,21 +23,29 @@ export class AppProtocol {
         message: undefined
     }
 
-    static composeUpdatePositionPaylaod(user_id, target_position) {
+    static composeUpdatePositionPaylaod(user_id, position) {
         const payload = deepCopy(AppProtocol.updatePositonPayload);
 
         payload.user_id = user_id;
-        payload.target_position = target_position;
+        payload.position = position;
         
+        return payload;
     }
 
-    static parseUpdatePositionPayload(payload) {
-        const user_id = payload.user_id;
-        const target_position = payload.target_position;
+    static parseUsersUpdatePosition(rooms) {
+        rooms.forEach(room => {
+            const users = room.users;
+
+            const users_array = [];
+            for(let i = 0; i < Object.entries(users).length; i++) {
+                users_array.push(users[i]);
+            }
+
+            room.users = users;
+        });
 
         return {
-            user_id: user_id,
-            target_position: target_position
+            rooms: rooms,
         };
     }
 
