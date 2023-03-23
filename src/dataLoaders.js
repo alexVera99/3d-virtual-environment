@@ -85,8 +85,10 @@ export class DataLoader {
                 }
 
                 const position = user.position;
+                const orientation = user.orientation;
+                const current_animation = user.current_animation
 
-                this.world.updateUserPosition(user_id, position);
+                this.world.updateUserAttitude(user_id, position, orientation, current_animation);
             })
         });
 

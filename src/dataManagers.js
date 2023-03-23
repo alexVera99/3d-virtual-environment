@@ -51,9 +51,9 @@ export class World{
         this.animations[animation.avatar_id] = animation;
     }
 
-    updateUserPosition(user_id, position) {
+    updateUserAttitude(user_id, position, orientation, current_animation) {
         const user = this.getUser(user_id);
-        user.updatePosition(position);
+        user.updateAttitude(position, orientation, current_animation);
     }
 
     removeUser(user_id) {

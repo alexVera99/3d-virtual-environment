@@ -64,7 +64,7 @@ export class Renderer {
                     return;
                 }
 
-                var anim = animations.idle;
+                var anim = animations.idle.animation;
                 var time_factor = 1
 
                 const cur_user_character = this.scene.getCurUserCharacter();
@@ -72,19 +72,35 @@ export class Renderer {
                 //control with keys
                 if (gl.keys["UP"] && sceneNode == cur_user_character) {
                     sceneNode.moveLocal([0, 0, 1]);
-                    anim = animations.walking;
-                    this.scene.updateUserPosition(cur_user_character.user_id, sceneNode.position);
+                    anim = animations.walking.animation;
+                    this.scene.updateUserAttitude(cur_user_character.user_id, 
+                        sceneNode.position,
+                        sceneNode.rotation,
+                        animations.walking.name);
                 }
                 else if (gl.keys["DOWN"] && sceneNode == cur_user_character) {
                     sceneNode.moveLocal([0, 0, -1]);
-                    anim = animations.walking;
+                    anim = animations.walking.animation;
                     time_factor = -1;
-                    this.scene.updateUserPosition(cur_user_character.user_id, sceneNode.position);
+                    this.scene.updateUserAttitude(cur_user_character.user_id,
+                        sceneNode.position,
+                        sceneNode.rotation,
+                        animations.walking.name);
                 }
-                if (gl.keys["LEFT"] && sceneNode == cur_user_character)
+                if (gl.keys["LEFT"] && sceneNode == cur_user_character){
                     sceneNode.rotate(90 * DEG2RAD * dt, [0, 1, 0]);
-                else if (gl.keys["RIGHT"] && sceneNode == cur_user_character)
+                    this.scene.updateUserAttitude(cur_user_character.user_id,
+                        sceneNode.position,
+                        sceneNode.rotation,
+                        animations.walking.name);
+                }
+                else if (gl.keys["RIGHT"] && sceneNode == cur_user_character){
                     sceneNode.rotate(-90 * DEG2RAD * dt, [0, 1, 0]);
+                    this.scene.updateUserAttitude(cur_user_character.user_id,
+                        sceneNode.position,
+                        sceneNode.rotation,
+                        animations.walking.name);
+                }
 
                 //move bones in the skeleton based on animation
                 anim.assignTime(t * 0.001 * time_factor);

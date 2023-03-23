@@ -40,13 +40,19 @@ export class RendererScene {
         }
     }
 
-    updateUserPosition(user_id, position) {
+    updateUserAttitude(user_id, position, orientation, current_animation) {
         const x = position[0];
         const y = position[1];
         const z = position[2];
         const position_array = [x, y, z];
 
-        this.world.updateUserPosition(user_id, position_array);
+        const x_o = orientation[0];
+        const y_o = orientation[1];
+        const z_o = orientation[2];
+        const w_o = orientation[3];
+        const orientation_array = [x_o, y_o, z_o, w_o];
+
+        this.world.updateUserAttitude(user_id, position_array, orientation_array, current_animation);
     }
 
     loadAnimation(url) {
@@ -72,9 +78,11 @@ export class RendererScene {
             })
             mat.register(user_material.name);
 
+            const user_attitude = user.getAttitude();
             var pivot = new RD.SceneNode({
-                position: user.getPosition()
+                position: user_attitude.position,
             });
+            pivot.rotation = user_attitude.orientation;
 
             var scene_node = new RD.SceneNode({
                 scaling: user_scene_node.scale,
@@ -90,7 +98,10 @@ export class RendererScene {
             Object.entries(user_animations).forEach(entry => {
                 const anim = entry[1];
 
-                animations[anim.name] = this.loadAnimation(anim.uri);
+                animations[anim.name] = {
+                    name: anim.name,
+                    animation: this.loadAnimation(anim.uri)
+                };
             });
 
             pivot.animations = animations;

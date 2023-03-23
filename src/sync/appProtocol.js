@@ -4,7 +4,9 @@ export class AppProtocol {
     static updatePositonPayload = {
         type: "user_update_attitude",
         user_id: undefined,
-        position: undefined
+        position: undefined,
+        orientation: undefined,
+        current_animation: undefined
     }
 
     static usersUpdatePositionType = "new_users_attitude";
@@ -23,11 +25,13 @@ export class AppProtocol {
         message: undefined
     }
 
-    static composeUpdateAttitudePaylaod(user_id, position) {
+    static composeUpdateAttitudePaylaod(user_id, position, orientation, current_animation) {
         const payload = deepCopy(AppProtocol.updatePositonPayload);
 
         payload.user_id = user_id;
         payload.position = position;
+        payload.orientation = orientation;
+        payload.current_animation = current_animation;
         
         return payload;
     }

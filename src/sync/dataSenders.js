@@ -9,8 +9,10 @@ export class ServerSynchronizer {
         const user = this.world.getCurrentUser();
         const user_id = user.user_id;
         const position = user.position;
+        const orientation = user.orientation;
+        const current_animation = user.current_animation;
 
-        const payload = AppProtocol.composeUpdateAttitudePaylaod(user_id, position);
+        const payload = AppProtocol.composeUpdateAttitudePaylaod(user_id, position, orientation, current_animation);
 
         this.chat.sendMessageToServer(payload);
     }
