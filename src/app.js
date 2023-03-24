@@ -3,11 +3,10 @@ import {Drawer} from "./draw.js";
 import { Renderer } from "./renderer.js";
 
 export default class App {
-    constructor(chat, world, serverSync, rendererScene) {
+    constructor(chat, world, rendererScene) {
         this.world = world;
         this.drawer = new Drawer();
         this.chat = chat;
-        this.serverSync = serverSync;
         this.chatHelper = new ChatUIHelper();
         this.scene = rendererScene;
         this.renderer = new Renderer(this.scene);
@@ -20,16 +19,6 @@ export default class App {
         this.scene.loadRoom();
 
         this.renderer.startRendering()
-    }
-
-    update(dt) {
-        var curr_user = this.world.getCurrentUser();
-        var curr_room = this.world.getCurrentRoom();
-        var users = this.world.getAllUsersInRoom(curr_room.room_id);
-        var userIsNull = !curr_user;
-        if(userIsNull){
-            return;
-        }
     }
 
     showOptions(show){

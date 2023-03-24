@@ -51,6 +51,16 @@ export class World{
         this.animations[animation.avatar_id] = animation;
     }
 
+    getUserAttitude(user_id) {
+        const user = this.getUser(user_id);
+        return user.getAttitude();
+    }
+
+    updateUserAttitude(user_id, position, orientation, current_animation) {
+        const user = this.getUser(user_id);
+        user.updateAttitude(position, orientation, current_animation);
+    }
+
     removeUser(user_id) {
         var user = this.getUser(user_id);
         var room_id = user.room_id;
@@ -70,7 +80,6 @@ export class World{
     changeRoom(new_room_id){
 
         var curr_room = this.getCurrentRoom();
-        //curr_room.users[this.currentUserId] = null;
         var curr_user = this.getCurrentUser();
 
         curr_room.users.delete(this.currentUserId);
@@ -85,11 +94,6 @@ export class World{
         var img = this.imageManager.loadImage(new_curr_room.image_uri);
         var exitpos = new_curr_room.exits[0].position[0]-(img.width/2);
 
-        /*if(this.currentRoomId == 2)
-            curr_user.position = 170;
-        else{
-            curr_user.position = 60;
-        }*/
         curr_user.position = exitpos;
         curr_user.target_position = curr_user.position;
         curr_user.animation = "idle_frames";

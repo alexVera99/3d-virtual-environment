@@ -1,3 +1,5 @@
+import { RendererUserLogic } from "./rendererUserLogic.js";
+
 export class Renderer {
     scene;
     camera;
@@ -6,11 +8,13 @@ export class Renderer {
     context;
     dom_canvas;
     users_charaters;
+    user_logic;
 
     constructor(rendererScene, bg_color) {
         this.scene = rendererScene;
         this.camera = new RD.Camera();
         this.bg_color = bg_color || [0.1, 0.1, 0.1, 1];
+        this.user_logic = new RendererUserLogic(this.scene);
     }
 
     init() {
@@ -56,7 +60,6 @@ export class Renderer {
             this.scene.updateScene(dt);
 
             sceneNodes.forEach((sceneNode) => {
-                var t = getTime();
                 let animations = sceneNode.animations;
 
                 let isNotCharacter = !animations;
@@ -64,31 +67,15 @@ export class Renderer {
                     return;
                 }
 
-                var anim = animations.idle;
-                var time_factor = 1
-
                 const cur_user_character = this.scene.getCurUserCharacter();
 
                 //control with keys
-                if (gl.keys["UP"] && sceneNode == cur_user_character) {
-                    sceneNode.moveLocal([0, 0, 1]);
-                    anim = animations.walking;
+                if(cur_user_character == sceneNode) {
+                    this.user_logic.moveCurrentUser(sceneNode, dt);
                 }
-                else if (gl.keys["DOWN"] && sceneNode == cur_user_character) {
-                    sceneNode.moveLocal([0, 0, -1]);
-                    anim = animations.walking;
-                    time_factor = -1;
+                else{
+                    this.user_logic.moveOtherUsers(sceneNode);
                 }
-                if (gl.keys["LEFT"] && sceneNode == cur_user_character)
-                    sceneNode.rotate(90 * DEG2RAD * dt, [0, 1, 0]);
-                else if (gl.keys["RIGHT"] && sceneNode == cur_user_character)
-                    sceneNode.rotate(-90 * DEG2RAD * dt, [0, 1, 0]);
-
-                //move bones in the skeleton based on animation
-                anim.assignTime(t * 0.001 * time_factor);
-                //copy the skeleton in the animation to the character
-                let snChild = sceneNode.getAllChildren()[0];
-                snChild.skeleton.copyFrom(anim.skeleton);
             });
         }.bind(this);
 

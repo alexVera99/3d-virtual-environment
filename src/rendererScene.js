@@ -24,6 +24,42 @@ export class RendererScene {
         return this.cur_user_character;
     }
 
+    findUserNodeById(user_id) {
+        const nodes = this.getAllNodes();
+
+        let node_of_interest;
+
+        for(let i = 0; i < nodes.lenght; i++) {
+            const node = nodes[i];
+
+            const is_user_found = node.user_id == user_id;
+            if (is_user_found) {
+                node_of_interest = node;
+                break;
+            }
+        }
+    }
+
+    getUserAttitude(user_id) {
+        const user_attitude = this.world.getUserAttitude(user_id);
+
+        return user_attitude;
+    }
+    updateUserAttitude(user_id, position, orientation, current_animation) {
+        const x = position[0];
+        const y = position[1];
+        const z = position[2];
+        const position_array = [x, y, z];
+
+        const x_o = orientation[0];
+        const y_o = orientation[1];
+        const z_o = orientation[2];
+        const w_o = orientation[3];
+        const orientation_array = [x_o, y_o, z_o, w_o];
+
+        this.world.updateUserAttitude(user_id, position_array, orientation_array, current_animation);
+    }
+
     loadAnimation(url) {
         var anim = new RD.SkeletalAnimation();
         anim.load(url);
@@ -47,9 +83,11 @@ export class RendererScene {
             })
             mat.register(user_material.name);
 
+            const user_attitude = user.getAttitude();
             var pivot = new RD.SceneNode({
-                position: user_scene_node.position
+                position: user_attitude.position,
             });
+            pivot.rotation = new Float32Array(user_attitude.orientation);
 
             var scene_node = new RD.SceneNode({
                 scaling: user_scene_node.scale,
@@ -65,10 +103,14 @@ export class RendererScene {
             Object.entries(user_animations).forEach(entry => {
                 const anim = entry[1];
 
-                animations[anim.name] = this.loadAnimation(anim.uri);
+                animations[anim.name] = {
+                    name: anim.name,
+                    animation: this.loadAnimation(anim.uri)
+                };
             });
 
             pivot.animations = animations;
+            pivot.user_id = user.user_id;
 
             if (user.isCurrUser) {
                 this.cur_user_character = pivot;

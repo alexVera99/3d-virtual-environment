@@ -50,13 +50,12 @@ export class Chat {
         this.server.on_user_connected = this.onUserConnected.bind(this);
         this.server.on_user_disconnected = this.onUserDisconnected.bind(this);
         this.server.on_room_info = this.onRoomInfo.bind(this);
+        this.server.on_request_user_attitude = this.onRequestUserAttitude.bind(this);
+        this.server.on_new_users_attitude = this.onNewUsersAttitude.bind(this);
     }
     onReadyServer(data) {
-        const token = this.loginManager.getToken();
-
         let payload = {
             type: "user_connect_world",
-            token: token,
         }
 
         this.sendMessageToServer(payload);
@@ -74,17 +73,14 @@ export class Chat {
         }
     }
     sendMessageToServer(message) {
+        const token = this.loginManager.getToken();
+        message.token = token;
+        
         this.server.sendMessage(message);
     }
 
     onMessageServer(author, msg) {
-        if (msg["type"] == AppProtocol.updatePositonPayload.type && this.on_user_update_position){
-            const data = AppProtocol.parseUpdatePositionPayload(msg);
-            const user_id = data["user_id"];
-            const target_position = data["target_position"];
-            this.on_user_update_position(user_id, target_position);
-        }
-        else if(msg["type"] == AppProtocol.updateRoomPayload.type && this.on_user_update_room) {
+        if(msg["type"] == AppProtocol.updateRoomPayload.type && this.on_user_update_room) {
             const data = AppProtocol.parseUpdateRoomPayload(msg);
             const user_id = data["user_id"];
             const room_id = data["room_id"];
@@ -119,7 +115,26 @@ export class Chat {
         msg
        )
 
+       const token = this.loginManager.getToken();
+       payload.token = token;
+
        this.sendMessageToServer(payload);
 
+    }
+
+    onRequestUserAttitude() {
+        if(this.on_request_user_attitude){
+            this.on_request_user_attitude();
+        }
+    }
+
+
+    onNewUsersAttitude(rooms) {
+        const data = AppProtocol.parseUsersUpdatePosition(rooms);
+        const rooms_data = data["rooms"];
+
+        if(this.on_new_users_attitude) {
+            this.on_new_users_attitude(rooms_data);
+        }
     }
 }

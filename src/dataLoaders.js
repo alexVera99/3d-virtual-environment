@@ -1,5 +1,4 @@
-import {Room, Animation, User} from "./dataContainers.js";
-import { World } from "./dataManagers.js";
+import {Room, User} from "./dataContainers.js";
 
 export class DataLoader {
     constructor(world, rendererScene) {
@@ -72,9 +71,26 @@ export class DataLoader {
         this.scene.loadScene();
     }
 
-    updateUserTargetPosition(user_id, target_position) {
-        var user = this.world.getUser(user_id);
-        user.target_position = target_position;
+    updateUsersAttitude(rooms) {
+        const cur_user_id = this.world.getCurrentUser().user_id;
+        rooms.forEach(room => {
+            const room_id = room.room_id;
+            const users = room.users;
+
+            users.forEach(user => {
+                const user_id = user.user_id;
+
+                if(user_id == cur_user_id){
+                    return;
+                }
+
+                const position = user.position;
+                const orientation = user.orientation;
+                const current_animation = user.current_animation
+
+                this.world.updateUserAttitude(user_id, position, orientation, current_animation);
+            })
+        });
     }
 
     updateUserRoom(user, room_id) {

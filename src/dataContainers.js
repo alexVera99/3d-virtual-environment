@@ -60,7 +60,6 @@ export class SceneNode {
     material;
     scale;
     animations;
-    position;
 
     constructor() {
         this.animations = new Object();
@@ -74,7 +73,6 @@ export class SceneNode {
         
         this.scale = data["scale"];
         this.parseAnimationFromJSON(data["animations"])
-        this.position = data["position"];
     }
 
     addAnimation(name, anim){
@@ -102,6 +100,8 @@ export class User {
         this.username = username || "";
         this.room_id = null; //room name
         this.scene_node;
+        this.position = [0.0, 0.0, 0.0];
+        this.orientation = [0.0, 0.0, 0.0, 1.0];
     }
 
     fromJSON(data, isCurrenUser = false) {
@@ -111,6 +111,27 @@ export class User {
         this.room_id = data["room_id"];
         this.scene_node = new SceneNode();
         this.scene_node.fromJSON(data["scene_node"]);
+        this.position = data["position"];
+        this.orientation = data["orientation"] || this.orientation;
+        this.current_animation = data["current_animation"];
+    }
+
+    updateAttitude(position, orientation, current_animation) {
+        this.position = position;
+        this.orientation = orientation;
+        this.current_animation = current_animation;
+    }
+
+    getPosition() {
+        return this.position;
+    }
+
+    getAttitude() {
+        return {
+            position: this.position,
+            orientation: this.orientation,
+            current_animation: this.current_animation
+        }
     }
 }
 
