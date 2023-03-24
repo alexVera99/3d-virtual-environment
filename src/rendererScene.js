@@ -40,6 +40,11 @@ export class RendererScene {
         }
     }
 
+    getUserAttitude(user_id) {
+        const user_attitude = this.world.getUserAttitude(user_id);
+
+        return user_attitude;
+    }
     updateUserAttitude(user_id, position, orientation, current_animation) {
         const x = position[0];
         const y = position[1];
@@ -82,7 +87,7 @@ export class RendererScene {
             var pivot = new RD.SceneNode({
                 position: user_attitude.position,
             });
-            pivot.rotation = user_attitude.orientation;
+            pivot.rotation = new Float32Array(user_attitude.orientation);
 
             var scene_node = new RD.SceneNode({
                 scaling: user_scene_node.scale,

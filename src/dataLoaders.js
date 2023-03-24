@@ -91,8 +91,6 @@ export class DataLoader {
                 this.world.updateUserAttitude(user_id, position, orientation, current_animation);
             })
         });
-
-        this.scene.loadScene();
     }
 
     updateUserRoom(user, room_id) {
