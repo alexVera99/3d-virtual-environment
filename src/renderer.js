@@ -9,12 +9,15 @@ export class Renderer {
     dom_canvas;
     users_charaters;
     user_logic;
+    free_camera;
+    world;
 
-    constructor(rendererScene, bg_color) {
+    constructor(rendererScene) {
         this.scene = rendererScene;
         this.camera = new RD.Camera();
-        this.bg_color = bg_color || [0.1, 0.1, 0.1, 1];
+        this.bg_color = [0.1, 0.1, 0.1, 1];
         this.user_logic = new RendererUserLogic(this.scene);
+        this.free_camera = false;
     }
 
     init() {
@@ -46,11 +49,12 @@ export class Renderer {
             var smoothtarget = vec3.lerp(vec3.create(), this.camera.target, camtarget, 0.05);
 
             this.camera.perspective(60, gl.canvas.width / gl.canvas.height, 0.1, 1000);
-            this.camera.lookAt(campos, smoothtarget, [0, 1, 0]);
+            if(!this.free_camera)
+                this.camera.lookAt(campos, smoothtarget, [0, 1, 0]);
             //clear
             this.renderer.clear(this.bg_color);
             //render scene
-            this.renderer.render(this.scene.getScene(), this.camera);
+            this.renderer.render(this.scene.getScene(), this.camera, null, 0b11);
         }.bind(this);
 
         //main update
@@ -85,8 +89,30 @@ export class Renderer {
         this.context.onmouseup = function (e) {
             if (e.click_time < 200) //fast click
             {
+                var scene = this.scene.getScene();
                 //compute collision with floor plane
                 var ray = this.camera.getRay(e.canvasx, e.canvasy);
+                var node = scene.testRay( ray, null, 10000, 0b1111 );
+                var curr_user_node = this.scene.getCurUserCharacter();
+                //get selector
+                var user_selector = null;
+                var dance_selector = null;
+                curr_user_node.children.forEach(child =>{
+                    if(child.name == "user_selector")
+                        user_selector = child;
+                    else if(child.name == "dance_selector")
+                        dance_selector = child;
+                });
+                if(node == user_selector){
+                    if(dance_selector.layers == 0b1000)
+                        dance_selector.layers = 0b11;
+                    else{
+                        dance_selector.layers = 0b1000;
+                    }
+                }
+                else if(node == dance_selector){
+                }
+        
                 if (ray.testPlane(RD.ZERO, RD.UP)) //collision
                 {
                     console.log("floor position clicked", ray.collision_point);
@@ -97,7 +123,7 @@ export class Renderer {
         this.context.onmousemove = function (e) {
             if (e.dragging) {
                 //orbit camera around
-                //camera.orbit( e.deltax * -0.01, RD.UP );
+                this.camera.orbit( e.deltax * -0.01, RD.UP );
                 //camera.position = vec3.scaleAndAdd( camera.position, camera.position, RD.UP, e.deltay );
                 this.camera.move([-e.deltax * 0.1, e.deltay * 0.1, 0]);
             }
@@ -115,5 +141,14 @@ export class Renderer {
 
     startRendering() {
         this.context.animate();
+    }
+
+    freeCamera(){
+        var btn = document.querySelector("#cam-btn");
+		this.free_camera = !this.free_camera;
+		if(this.free_camera)
+			btn.innerText = "Free Camera On";
+		else if(!this.free_camera)
+			btn.innerText = "Free Camera Off";
     }
 }

@@ -60,6 +60,7 @@ export class SceneNode {
     material;
     scale;
     animations;
+    curr_animation;
 
     constructor() {
         this.animations = new Object();
@@ -73,6 +74,7 @@ export class SceneNode {
         
         this.scale = data["scale"];
         this.parseAnimationFromJSON(data["animations"])
+        this.curr_animation = "idle";
     }
 
     addAnimation(name, anim){

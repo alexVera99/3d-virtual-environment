@@ -13,14 +13,44 @@ export default class App {
     }
 
     start(){
+        var buttons = document.querySelectorAll("button");
+	    buttons.forEach(btn =>{
+		    btn.addEventListener("click", this.action.bind(this));
+	    })
         this.renderer.init();
      
         this.scene.loadUserSceneNodes();
         this.scene.loadRoom();
-
         this.renderer.startRendering()
     }
 
+    action(e){
+        var value = e.target.value;
+        if(value == "open"){
+            var chat = document.querySelector(".chat");
+            chat.style.display = "";
+        }
+        else if(value == "close"){
+            var chat = document.querySelector(".chat");
+            chat.style.display = "none";
+        }
+        else if(value == "free-cam")
+        {
+            this.renderer.freeCamera();
+        }
+        else if(value == "send-msg"){
+            var curr_user = this.world.getCurrentUser();
+            var input = document.querySelector(".chat-input");
+            var msg = input.value;
+            if(msg != "")
+            {
+                input.value = "";
+                console.log("sending message: " + msg);
+                this.chatHelper.addMessage(curr_user.username, msg);
+                this.chat.sendMessage(curr_user, msg);
+            }
+        }
+    }
     showOptions(show){
         var not_canvas = document.querySelector(".change-room");  
         var yesbutton = document.querySelector(".yesButton");

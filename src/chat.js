@@ -10,8 +10,8 @@ export class ChatUIHelper {
         return msg;
     }
     
-    addMessage(user_name, room_id, msg){
-        var messages = document.getElementById("room"+room_id);
+    addMessage(user_name, msg){
+        var messages = document.querySelector(".messages");
         if(msg !=""){
             
             var msgHTML = `

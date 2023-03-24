@@ -63,6 +63,7 @@ export class RendererUserLogic {
             sceneNode.position = target_position;
         }
         
+        
         const t = getTime();
         const time_factor = 1;
         this.moveBonesBasedOnAnimation(anim, t, time_factor, sceneNode)
