@@ -51,15 +51,23 @@ export class RendererUserLogic {
 
         const target_position = new Float32Array(attitude.position);
         const orientation = new Float32Array(attitude.orientation);
-
+        const current_animation = attitude.current_animation;
         sceneNode.rotation = orientation;
-
         const dist_to_target_postition = vec3.dist(position, target_position);
         let anim;
 
         const animations = sceneNode.animations;
+
+        
         if (dist_to_target_postition < 5.0) {
-            anim = animations.idle.animation;
+            if(current_animation == "dance")
+                anim = animations.dance.animation;
+            else if(current_animation == "cheer")
+                anim = animations.cheer.animation;
+            else if(current_animation == "wave")
+                anim = animations.wave.animation;
+            else
+                anim = animations.idle.animation;
         }
         else {
             anim = animations.walking.animation;
