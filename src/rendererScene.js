@@ -139,6 +139,34 @@ export class RendererScene {
                     layers: 0b1000
                 });
                 pivot.addChild( dance );
+                var wave_mat = new RD.Material({
+                    textures: {
+                     color: "wave.jpg" }
+                    });
+                wave_mat.register("wave_cube");
+                var wave = new RD.SceneNode({
+                    position: [10,55,0],
+                    mesh: "cube",
+                    material: "wave_cube",
+                    scaling: [5,5,5],
+                    name: "wave_selector",
+                    layers: 0b1000
+                });
+                pivot.addChild( wave );
+                var cheer_mat = new RD.Material({
+                    textures: {
+                     color: "cheer.jpg" }
+                    });
+                cheer_mat.register("cheer_cube");
+                var cheer = new RD.SceneNode({
+                    position: [-10,55,0],
+                    mesh: "cube",
+                    material: "cheer_cube",
+                    scaling: [5,5,5],
+                    name: "cheer_selector",
+                    layers: 0b1000
+                });
+                pivot.addChild( cheer );
                 this.cur_user_character = pivot;
             }
             this.scene.root.addChild(pivot);

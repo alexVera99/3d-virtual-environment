@@ -10,7 +10,7 @@ export class Renderer {
     users_charaters;
     user_logic;
     free_camera;
-    world;
+    attitude;
 
     constructor(rendererScene) {
         this.scene = rendererScene;
@@ -18,6 +18,9 @@ export class Renderer {
         this.bg_color = [0.1, 0.1, 0.1, 1];
         this.user_logic = new RendererUserLogic(this.scene);
         this.free_camera = false;
+        this.attitude = "idle";
+        this.scene.user_attitude = "idle";
+
     }
 
     init() {
@@ -42,7 +45,6 @@ export class Renderer {
             gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
             const cur_user_character = this.scene.getCurUserCharacter();
-
             var usrpos = cur_user_character.localToGlobal([0, 40, 0]);
             var campos = cur_user_character.localToGlobal([0, 50, -70]);
             var camtarget = cur_user_character.localToGlobal([0, 20, 70]);
@@ -72,7 +74,7 @@ export class Renderer {
                 }
 
                 const cur_user_character = this.scene.getCurUserCharacter();
-
+                
                 //control with keys
                 if(cur_user_character == sceneNode) {
                     this.user_logic.moveCurrentUser(sceneNode, dt);
@@ -97,20 +99,47 @@ export class Renderer {
                 //get selector
                 var user_selector = null;
                 var dance_selector = null;
+                var wave_selector = null;
+                var cheer_selector = null;
                 curr_user_node.children.forEach(child =>{
                     if(child.name == "user_selector")
                         user_selector = child;
                     else if(child.name == "dance_selector")
                         dance_selector = child;
+                    else if(child.name == "wave_selector")
+                        wave_selector = child;
+                    else if(child.name == "cheer_selector")
+                        cheer_selector = child;
                 });
                 if(node == user_selector){
-                    if(dance_selector.layers == 0b1000)
+                    if(dance_selector.layers == 0b1000 ){
                         dance_selector.layers = 0b11;
+                        wave_selector.layers = 0b11;
+                        cheer_selector.layers = 0b11;
+                    }
                     else{
                         dance_selector.layers = 0b1000;
+                        wave_selector.layers = 0b1000;
+                        cheer_selector.layers = 0b1000;
                     }
                 }
                 else if(node == dance_selector){
+                    if(this.scene.user_attitude != "dance")
+                        this.scene.user_attitude = "dance";
+                    else
+                        this.scene.user_attitude = "idle";
+                }
+                else if(node == wave_selector){
+                    if(this.scene.user_attitude != "wave")
+                        this.scene.user_attitude = "wave";
+                    else
+                        this.scene.user_attitude = "idle";
+                }
+                else if(node == cheer_selector){
+                    if(this.scene.user_attitude != "cheer")
+                        this.scene.user_attitude = "cheer";
+                    else
+                        this.scene.user_attitude = "idle";
                 }
         
                 if (ray.testPlane(RD.ZERO, RD.UP)) //collision

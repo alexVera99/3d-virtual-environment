@@ -8,21 +8,30 @@ export class RendererUserLogic {
         let time_factor = 1;
         const animations = sceneNode.animations;
         let anim_object = animations.idle; //Contains name and animation
-
+        if(this.scene.user_attitude == "dance")
+            anim_object = animations.dance;
+        else if(this.scene.user_attitude == "wave")
+            anim_object = animations.wave;
+        else if(this.scene.user_attitude == "cheer")
+            anim_object = animations.cheer;
         if (gl.keys["UP"]) {
             sceneNode.moveLocal([0, 0, 1]);
             anim_object = animations.walking;
+            this.scene.user_attitude = "walk";
         }
         else if (gl.keys["DOWN"]) {
             sceneNode.moveLocal([0, 0, -1]);
             anim_object = animations.walking;
             time_factor = -1;
+            this.scene.user_attitude = "walk";
         }
         if (gl.keys["LEFT"]) {
             sceneNode.rotate(90 * DEG2RAD * dt, [0, 1, 0]);
+            this.scene.user_attitude = "idle";
         }
         else if (gl.keys["RIGHT"]) {
             sceneNode.rotate(-90 * DEG2RAD * dt, [0, 1, 0]);
+            this.scene.user_attitude = "idle";
         }
 
         this.scene.updateUserAttitude(sceneNode.user_id,
