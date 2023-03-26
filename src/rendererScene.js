@@ -23,6 +23,9 @@ export class RendererScene {
     getCurUserCharacter() {
         return this.cur_user_character;
     }
+    changeCurUserAnimation(animation){
+        this.cur_user_character.cur
+    }
 
     findUserNodeById(user_id) {
         const nodes = this.getAllNodes();
@@ -113,6 +116,57 @@ export class RendererScene {
             pivot.user_id = user.user_id;
 
             if (user.isCurrUser) {
+                var user_selector = new RD.SceneNode({
+                    position: [0,40,0],
+                    mesh: "cube",
+                    material: user_material.name,
+                    scaling: [10,20,10],
+                    name: "user_selector",
+                    layers: 0b1000
+                });
+                pivot.addChild( user_selector );
+                var dance_mat = new RD.Material({
+                    textures: {
+                     color: "dance.jpeg" }
+                    });
+                dance_mat.register("dance_cube");
+                var dance = new RD.SceneNode({
+                    position: [0,60,0],
+                    mesh: "cube",
+                    material: "dance_cube",
+                    scaling: [5,5,5],
+                    name: "dance_selector",
+                    layers: 0b1000
+                });
+                pivot.addChild( dance );
+                var wave_mat = new RD.Material({
+                    textures: {
+                     color: "wave.jpg" }
+                    });
+                wave_mat.register("wave_cube");
+                var wave = new RD.SceneNode({
+                    position: [10,55,0],
+                    mesh: "cube",
+                    material: "wave_cube",
+                    scaling: [5,5,5],
+                    name: "wave_selector",
+                    layers: 0b1000
+                });
+                pivot.addChild( wave );
+                var cheer_mat = new RD.Material({
+                    textures: {
+                     color: "cheer.jpg" }
+                    });
+                cheer_mat.register("cheer_cube");
+                var cheer = new RD.SceneNode({
+                    position: [-10,55,0],
+                    mesh: "cube",
+                    material: "cheer_cube",
+                    scaling: [5,5,5],
+                    name: "cheer_selector",
+                    layers: 0b1000
+                });
+                pivot.addChild( cheer );
                 this.cur_user_character = pivot;
             }
             this.scene.root.addChild(pivot);
