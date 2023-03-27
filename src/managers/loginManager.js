@@ -4,7 +4,7 @@ export class LoginManager {
     constructor(base_url) {
         this.token = undefined;
 
-        this.loginEndpoint = "http://" + base_url + "/login";
+        this.loginEndpoint = base_url + "/login";
 
         this.loginForm = new LoginForm();
     }

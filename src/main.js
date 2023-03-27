@@ -13,10 +13,10 @@ var dataLoader = new DataLoader(world, rendererScene);
 
 var serverURL = "127.0.0.1:8081";
 
-const loginManager = new LoginManager(serverURL);
+const loginManager = new LoginManager("http://" + serverURL);
 
 //var serverURL = "ecv-etic.upf.edu/node/9021/ws/";
-var chat = new Chat(serverURL, loginManager);
+var chat = new Chat("ws://" + serverURL, loginManager);
 chat.on_user_connected = dataLoader.loadNewUser.bind(dataLoader);
 chat.on_user_disconnected = dataLoader.updateUserDisconnected.bind(dataLoader);
 chat.on_room_info = dataLoader.loadRoomInfo.bind(dataLoader);
