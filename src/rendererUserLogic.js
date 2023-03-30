@@ -8,6 +8,7 @@ export class RendererUserLogic {
         let time_factor = 1;
         const animations = sceneNode.animations;
         let anim_object = animations.idle; //Contains name and animation
+        var anim_name = null;
         if(this.scene.user_attitude == "dance")
             anim_object = animations.dance;
         else if(this.scene.user_attitude == "wave")
@@ -22,8 +23,9 @@ export class RendererUserLogic {
         else if (gl.keys["DOWN"]) {
             sceneNode.moveLocal([0, 0, -1]);
             anim_object = animations.walking;
+            anim_name = "back";
             time_factor = -1;
-            this.scene.user_attitude = "walk";
+            this.scene.user_attitude = "back";
         }
         if (gl.keys["LEFT"]) {
             sceneNode.rotate(90 * DEG2RAD * dt, [0, 1, 0]);
@@ -33,13 +35,18 @@ export class RendererUserLogic {
             sceneNode.rotate(-90 * DEG2RAD * dt, [0, 1, 0]);
             this.scene.user_attitude = "idle";
         }
-
+        var pos = sceneNode.position;
+		var nearest_pos = this.scene.scene.walkarea.adjustPosition( pos );
+		sceneNode.position = nearest_pos;
+        if(anim_name == null)
+            anim_name = anim_object.name;
+       
         this.scene.updateUserAttitude(sceneNode.user_id,
             sceneNode.position,
             sceneNode.rotation,
-            anim_object.name);
+            anim_name);
 
-        const anim = anim_object.animation;
+        let anim = anim_object.animation;;
         this.moveBonesBasedOnAnimation(anim, t, time_factor, sceneNode);
     }
     
@@ -54,11 +61,11 @@ export class RendererUserLogic {
         const current_animation = attitude.current_animation;
         sceneNode.rotation = orientation;
         const dist_to_target_postition = vec3.dist(position, target_position);
-        let anim;
+        var time_factor = 1;
 
         const animations = sceneNode.animations;
+        let anim = animations.idle.animation;
 
-        
         if (dist_to_target_postition < 5.0) {
             if(current_animation == "dance")
                 anim = animations.dance.animation;
@@ -66,12 +73,17 @@ export class RendererUserLogic {
                 anim = animations.cheer.animation;
             else if(current_animation == "wave")
                 anim = animations.wave.animation;
-            else
+            else if(current_animation == "idle")
                 anim = animations.idle.animation;
-        }
-        else {
-            anim = animations.walking.animation;
-            sceneNode.moveLocal([0, 0, 1]);
+            else {
+                anim = animations.walking.animation;
+                if(current_animation == "back"){
+                    sceneNode.moveLocal([0, 0, -1]);
+                    time_factor = -1;
+                }
+                else
+                    sceneNode.moveLocal([0, 0, 1]);
+            }
         }
 
         //PANIC! The object is too far from the target object.
@@ -82,7 +94,6 @@ export class RendererUserLogic {
         
         
         const t = getTime();
-        const time_factor = 1;
         this.moveBonesBasedOnAnimation(anim, t, time_factor, sceneNode)
     }
 

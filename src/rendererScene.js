@@ -232,11 +232,16 @@ export class RendererScene {
 
     loadRoom() {
         const room = this.world.getCurrentRoom();
-
+        var walkarea = new WalkArea();
+        walkarea.addRect([-450,0,120],900,450);
+        walkarea.addRect([-120,0,120],-330,-200);
+        walkarea.addRect([120,0,120],330,-200);
+        
         var room_scene_node = new RD.SceneNode({
             scaling: room.scale,
         });
-
+        this.scene.walkarea = walkarea;
+       
         room_scene_node.loadGLTF(room.gltf_uri);
         this.scene.root.addChild(room_scene_node);
     }
