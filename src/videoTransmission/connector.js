@@ -103,7 +103,10 @@ export class StreamConsumer {
     }
 
     connectToID(id) {
-        console.log("Trying to connect...");
-        this.connector.connectToID(id, this.streamHTML);
+        this.stream_id = id;
+        this.connector.on_open = function() {
+            console.log("Trying to connect...");
+            this.connector.connectToID(this.stream_id, this.streamHTML);
+        }.bind(this)
     }
 }
