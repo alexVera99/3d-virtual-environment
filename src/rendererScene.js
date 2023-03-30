@@ -2,6 +2,7 @@ export class RendererScene {
     scene;
     cur_user_character;
     world;
+    tex;
 
     constructor(world) {
         this.scene = new RD.Scene();
@@ -171,6 +172,45 @@ export class RendererScene {
             }
             this.scene.root.addChild(pivot);
         });
+    }
+
+    loadStreamVideo() {
+        const video = document.querySelector("video#other");
+
+        const isVideoPause = video.paused;
+        const isNotVideoReady = !video.readyState === 4;
+
+        if (isVideoPause && isNotVideoReady) {
+            return;
+        }
+
+        if (video.videoWidth) {
+            if (!this.tex) {
+                this.tex = GL.Texture.fromVideo(video);
+                gl.textures["mytext"] = this.tex;
+                const mat = new RD.Material({
+                    textures: {
+                        color: "mytext"
+                    }
+                });
+                mat.register("mymat");
+
+                const scene_node = new RD.SceneNode({
+                    position: [0, 100, 0],
+                    mesh: "cube",
+                    material: "mymat",
+                    scaling: [100, 100, 100],
+                    name: "video_stream"
+                })
+
+                this.scene.root.addChild(scene_node);
+            }
+            else
+                this.tex.uploadImage(video);
+        }
+
+        // Call requestAnimationFrame again to repeat the process
+        requestAnimationFrame(this.loadStreamVideo.bind(this));
     }
 
     loadRoom() {

@@ -28,13 +28,17 @@ export default class App {
         this.renderer.startRendering()
 
         // Stream callback
-        this.chat.on_stream_id = this.onStream;
+        this.chat.on_stream_id = this.onStream.bind(this);
     }
 
     onStream(id) {
         const consumer = new StreamConsumer();
 
         consumer.connectToID(id);
+
+        const video = document.querySelector("video#other");
+
+        video.addEventListener('loadedmetadata', this.scene.loadStreamVideo().bind(this.scene));
 
         console.log("Start receiving stream :P");
     }
