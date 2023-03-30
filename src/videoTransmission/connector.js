@@ -61,10 +61,20 @@ export class StreamProducer {
     // to the clients that connect to it
     constructor() {
         this.connector = new P2PConnector();
-        this.connector.on_open = (id) => {
-            console.log(id);
-        }
+        this.connector.on_open = this.onGetStreamId.bind(this);
         this.my_stream = undefined;
+        
+        // Callbacks
+
+        this.on_get_stream_id = undefined;
+    }
+
+    onGetStreamId(id) {
+        console.log(id);
+
+        if(this.on_get_stream_id) {
+            this.on_get_stream_id(id);
+        }
     }
 
     streamWebcam() {

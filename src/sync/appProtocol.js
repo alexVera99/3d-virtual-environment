@@ -25,6 +25,11 @@ export class AppProtocol {
         message: undefined
     }
 
+    static streamIdPayload = {
+        type: "stream_id",
+        stream_id: undefined,
+    }
+
     static composeUpdateAttitudePaylaod(user_id, position, orientation, current_animation) {
         const payload = deepCopy(AppProtocol.updatePositonPayload);
 
@@ -94,5 +99,21 @@ export class AppProtocol {
             message: message
 
         }
+    }
+
+    static composeStreamIdPayload(id) {
+        const payload = deepCopy(AppProtocol.streamIdPayload);
+
+        payload.stream_id = id;
+
+        return payload;
+    }
+
+    static parseStreamIdPayload(payload) {
+        const stream_id = payload.stream_id;
+
+        return {
+            stream_id: stream_id
+        };
     }
 }
