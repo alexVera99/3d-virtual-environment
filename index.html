@@ -62,13 +62,17 @@
                         <input type="text" class="log" placeholder="Enter Username" id = "username" required>
 
                         <b>Password</b>
-                        <input type="password" placeholder="Enter Password" name="psw" required>
+                        <input type="password" placeholder="Enter Password" name="psw" id="password" required>
 
                         <b>Repeat Password</b>
-                        <input type="password" placeholder="Repeat Password" name="psw" required>
+                        <input type="password" placeholder="Repeat Password" name="psw" id="repeat-password" required>
+                        <input type="checkbox" id="checkbox-artist">
 
-                        <b>Avatar</b><br>
-                        <div class="avatars">
+                        <p class="login-error" id="user-create-error">User couldn't be created</p>
+                        <p class="login-error" id="password-match-error">Password dont' match</p>
+                            
+                       <!--  <b>Avatar</b><br>
+                        <div class="avatars"> -->
                             
                         </div>   
                         <button class="btn" id="sign-up" type="button">Sign Up</button>
