@@ -196,10 +196,10 @@ export class RendererScene {
                 mat.register("mymat");
 
                 const scene_node = new RD.SceneNode({
-                    position: [0, 100, 0],
+                    position: [-15, 150, -291],
                     mesh: "cube",
                     material: "mymat",
-                    scaling: [100, 100, 100],
+                    scaling: [235, 180, 0.01],
                     name: "video_stream"
                 })
 
