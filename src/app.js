@@ -38,7 +38,7 @@ export default class App {
 
         const video = document.querySelector("video#other");
 
-        video.addEventListener('loadedmetadata', this.scene.loadStreamVideo().bind(this.scene));
+        video.addEventListener('loadedmetadata', this.scene.loadStreamVideo.bind(this.scene));
 
         console.log("Start receiving stream :P");
     }
@@ -62,11 +62,9 @@ export default class App {
         const producer = new StreamProducer();
 
         producer.on_get_stream_id = function(id) {
-            this.chat.sendStreamIdToServer(id);
+            producer.streamWebcam(this.chat.sendStreamIdToServer.bind(this.chat), id);
             console.log("Streaming...");
         }.bind(this);
-
-        producer.streamWebcam();
     }
 
     action(e){

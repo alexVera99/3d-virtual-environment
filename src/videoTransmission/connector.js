@@ -77,7 +77,7 @@ export class StreamProducer {
         }
     }
 
-    streamWebcam() {
+    streamWebcam(callback, ...params) {
         const getUserMedia = navigator.getUserMedia ||
             navigator.webkitGetUserMedia ||
             navigator.mozGetUserMedia;
@@ -88,6 +88,9 @@ export class StreamProducer {
             videoHTML.volume = 0; //avoid audio feedback
             this.my_stream = stream;
             this.connector.enableIncomingCalls(this.my_stream);
+            if(callback) {
+                callback(...params);
+            }
         }.bind(this), function (err) {
             console.log('Failed to get camera stream', err);
         });
