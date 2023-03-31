@@ -53,9 +53,9 @@ export default class App {
     showStreamButton() {
         const user = this.world.getCurrentUser();
 
-        //const userIsStreamer = user.isStreamer();
-        const userIsStreamer = true;
-        if (!userIsStreamer) { alert("You are not a streamer!");
+        const userIsStreamer = user.isStreamer();
+
+        if (!userIsStreamer) {
             return;
         }
 

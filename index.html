@@ -62,13 +62,18 @@
                         <input type="text" class="log" placeholder="Enter Username" id = "username" required>
 
                         <b>Password</b>
-                        <input type="password" placeholder="Enter Password" name="psw" required>
+                        <input type="password" placeholder="Enter Password" name="psw" id="password" required>
 
                         <b>Repeat Password</b>
-                        <input type="password" placeholder="Repeat Password" name="psw" required>
+                        <input type="password" placeholder="Repeat Password" name="psw" id="repeat-password" required>
+                        <b>Are you an artist?</b>
+                        <input type="checkbox" id="checkbox-artist">
 
-                        <b>Avatar</b><br>
-                        <div class="avatars">
+                        <p class="login-error" id="user-create-error">User couldn't be created</p>
+                        <p class="login-error" id="password-match-error">Password dont' match</p>
+                            
+                       <!--  <b>Avatar</b><br>
+                        <div class="avatars"> -->
                             
                         </div>   
                         <button class="btn" id="sign-up" type="button">Sign Up</button>
@@ -77,6 +82,15 @@
                    
                 </form>
             </div>            
+
+            <div class="modal" id="sign-up-modal-success">
+                <div class="modal-content animate">
+                    <div class="log-container">
+                        <p class="sign-up-success" id="password-match-error">User created successfully 🎉</p>
+                        <p>You can log in now :)</p>
+                    </div>
+                </div>
+            </div>
             
         </div>
 
@@ -84,12 +98,14 @@
 // Get the modal
 var logIn = document.getElementById('logIn');
 var signUp = document.getElementById('signUp');
+var signUpSuccess = document.getElementById("sign-up-modal-success");
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == logIn || event.target == signUp) {
+    if (event.target == logIn || event.target == signUp || event.target == signUpSuccess) {
         logIn.style.display = "none";
         signUp.style.display = "none";
+        signUpSuccess.style.display = "none";
     }
 }
 

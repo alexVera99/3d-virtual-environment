@@ -102,6 +102,7 @@ export class User {
         this.scene_node;
         this.position = [0.0, 0.0, 0.0];
         this.orientation = [0.0, 0.0, 0.0, 1.0];
+        this.is_streamer = false;
     }
 
     fromJSON(data, isCurrenUser = false) {
@@ -114,6 +115,7 @@ export class User {
         this.position = data["position"];
         this.orientation = data["orientation"] || this.orientation;
         this.current_animation = data["current_animation"];
+        this.is_streamer = data["is_streamer"] || this.is_streamer;
     }
 
     updateAttitude(position, orientation, current_animation) {
@@ -132,6 +134,10 @@ export class User {
             orientation: this.orientation,
             current_animation: this.current_animation
         }
+    }
+
+    isStreamer() {
+        return this.is_streamer;
     }
 }
 
