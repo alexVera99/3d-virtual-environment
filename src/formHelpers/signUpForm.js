@@ -31,7 +31,7 @@ export class SignUpForm {
             password: password,
             room_id: this.room_id,
             scene_node_id: this.scene_node_id,
-            isArtis: isArtist
+            is_streamer: isArtist
         }
     }
 
