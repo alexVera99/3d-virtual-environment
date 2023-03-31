@@ -16,7 +16,7 @@ export class Renderer {
         this.scene = rendererScene;
         this.camera = new RD.Camera();
         this.bg_color = [0.1, 0.1, 0.1, 1];
-        this.user_logic = new RendererUserLogic(this.scene);
+        this.user_logic = null;
         this.free_camera = false;
         this.attitude = "idle";
         this.scene.user_attitude = "idle";
@@ -38,7 +38,9 @@ export class Renderer {
         // Set up camera
         this.camera.perspective(60, gl.canvas.width / gl.canvas.height, 0.1, 1000);
         this.camera.lookAt([0, 40, 100], [0, 20, 0], [0, 1, 0]);
-
+        
+        this.user_logic = new RendererUserLogic(this.scene);
+        
         this.context.ondraw = function () {
             gl.canvas.width = this.dom_canvas.offsetWidth;
             gl.canvas.height = this.dom_canvas.offsetHeight;
@@ -50,7 +52,7 @@ export class Renderer {
             var camtarget = cur_user_character.localToGlobal([0, 20, 70]);
             var smoothtarget = vec3.lerp(vec3.create(), this.camera.target, camtarget, 0.05);
 
-            this.camera.perspective(60, gl.canvas.width / gl.canvas.height, 0.1, 1000);
+            this.camera.perspective(60, gl.canvas.width / gl.canvas.height, 0.1, 1500);
             if(!this.free_camera)
                 this.camera.lookAt(campos, smoothtarget, [0, 1, 0]);
             //clear
@@ -142,10 +144,10 @@ export class Renderer {
                         this.scene.user_attitude = "idle";
                 }
         
-                if (ray.testPlane(RD.ZERO, RD.UP)) //collision
+                /*if (ray.testPlane(RD.ZERO, RD.UP)) //collision
                 {
                     console.log("floor position clicked", ray.collision_point);
-                }
+                }*/
             }
         }.bind(this);
 

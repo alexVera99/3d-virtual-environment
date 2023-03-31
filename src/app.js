@@ -101,19 +101,4 @@ export default class App {
             }
         }
     }
-    showOptions(show){
-        var not_canvas = document.querySelector(".change-room");  
-        var yesbutton = document.querySelector(".yesButton");
-      
-        if(show){
-            var text = not_canvas.querySelector("p")
-            var room = this.world.getRoom(yesbutton.id);
-            text.innerText = "do you want to go to the "+room.room_name+"?";
-            not_canvas.style.display = "block";
-
-        }else{
-            
-            not_canvas.style.display = "none";
-        }   
-    }
 }
