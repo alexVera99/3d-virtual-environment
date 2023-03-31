@@ -33,15 +33,17 @@ export class RendererScene {
 
         let node_of_interest;
 
-        for(let i = 0; i < nodes.lenght; i++) {
+        for(let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
 
             const is_user_found = node.user_id == user_id;
             if (is_user_found) {
                 node_of_interest = node;
-                break;
+                return node_of_interest
             }
         }
+
+        return null;
     }
 
     getUserAttitude(user_id) {
@@ -76,45 +78,8 @@ export class RendererScene {
         const users = this.world.getAllUsersInRoom(room.room_id);
 
         users.forEach(user => {
-            let user_scene_node = user.scene_node;
-            let user_material = user_scene_node.material;
-            let user_animations = user.scene_node.animations;
-
-            var mat = new RD.Material({
-                textures: {
-                    color: user_material.color_texture
-                }
-            })
-            mat.register(user_material.name);
-
-            const user_attitude = user.getAttitude();
-            var pivot = new RD.SceneNode({
-                position: user_attitude.position,
-            });
-            pivot.rotation = new Float32Array(user_attitude.orientation);
-
-            var scene_node = new RD.SceneNode({
-                scaling: user_scene_node.scale,
-                mesh: user_scene_node.mesh_uri,
-                material: user_material.name
-            });
-
-            pivot.addChild(scene_node);
-
-            scene_node.skeleton = new RD.Skeleton();
-
-            let animations = new Object();
-            Object.entries(user_animations).forEach(entry => {
-                const anim = entry[1];
-
-                animations[anim.name] = {
-                    name: anim.name,
-                    animation: this.loadAnimation(anim.uri)
-                };
-            });
-
-            pivot.animations = animations;
-            pivot.user_id = user.user_id;
+            var pivot = this.addUserToScene(user);
+            let user_material = user.scene_node.material;
 
             if (user.isCurrUser) {
                 var user_selector = new RD.SceneNode({
@@ -170,8 +135,60 @@ export class RendererScene {
                 pivot.addChild( cheer );
                 this.cur_user_character = pivot;
             }
-            this.scene.root.addChild(pivot);
         });
+    }
+
+    addUserToScene(user) {
+        let user_scene_node = user.scene_node;
+        let user_material = user_scene_node.material;
+        let user_animations = user.scene_node.animations;
+
+        var mat = new RD.Material({
+            textures: {
+                color: user_material.color_texture
+            }
+        });
+        mat.register(user_material.name);
+
+        const user_attitude = user.getAttitude();
+        var pivot = new RD.SceneNode({
+            position: user_attitude.position,
+        });
+        pivot.rotation = new Float32Array(user_attitude.orientation);
+
+        var scene_node = new RD.SceneNode({
+            scaling: user_scene_node.scale,
+            mesh: user_scene_node.mesh_uri,
+            material: user_material.name
+        });
+
+        pivot.addChild(scene_node);
+
+        scene_node.skeleton = new RD.Skeleton();
+
+        let animations = new Object();
+        Object.entries(user_animations).forEach(entry => {
+            const anim = entry[1];
+
+            animations[anim.name] = {
+                name: anim.name,
+                animation: this.loadAnimation(anim.uri)
+            };
+        });
+
+        pivot.animations = animations;
+        pivot.user_id = user.user_id;
+
+        this.scene.root.addChild(pivot);
+        return pivot;
+    }
+
+    removeUser(user_id) {
+        const node = this.findUserNodeById(user_id);
+        
+        if(node) {
+            this.scene.root.removeChild(node);
+        }
     }
 
     loadStreamVideo() {
