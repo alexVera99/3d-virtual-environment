@@ -27,6 +27,13 @@ export default class App {
         this.scene.loadRoom();
         this.renderer.startRendering()
 
+        // If there is a stream, use it
+        const room = this.world.getCurrentRoom();
+        const stream_id = room.stream_id; 
+        if(stream_id) {
+            this.onStream(stream_id);
+        }
+
         // Stream callback
         this.chat.on_stream_id = this.onStream.bind(this);
     }
