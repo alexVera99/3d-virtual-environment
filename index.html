@@ -81,6 +81,15 @@
                    
                 </form>
             </div>            
+
+            <div class="modal" id="sign-up-modal-success">
+                <div class="modal-content animate">
+                    <div class="log-container">
+                        <p class="sign-up-success" id="password-match-error">User created successfully 🎉</p>
+                        <p>You can log in now :)</p>
+                    </div>
+                </div>
+            </div>
             
         </div>
 
@@ -88,12 +97,14 @@
 // Get the modal
 var logIn = document.getElementById('logIn');
 var signUp = document.getElementById('signUp');
+var signUpSuccess = document.getElementById("sign-up-modal-success");
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == logIn || event.target == signUp) {
+    if (event.target == logIn || event.target == signUp || event.target == signUpSuccess) {
         logIn.style.display = "none";
         signUp.style.display = "none";
+        signUpSuccess.style.display = "none";
     }
 }
 

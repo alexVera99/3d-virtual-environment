@@ -1,5 +1,6 @@
 export class SignUpForm {
     constructor() {
+        this.modalHTML = document.querySelector("#signUp");
         this.containerHTML = document.querySelector("#signUp .log-container");
         this.usernameHTML = this.containerHTML.querySelector("#username");
         this.passwordHTML = this.containerHTML.querySelector("#password");
@@ -8,11 +9,10 @@ export class SignUpForm {
         this.userCreateError = this.containerHTML.querySelector(".login-error#user-create-error");
         this.passwordNotMatchError = this.containerHTML.querySelector(".login-error#password-match-error");
 
+        this.userCreatedHTML = document.querySelector("#sign-up-modal-success");
         // DEFAULT AVATAR AND ROOM
         this.scene_node_id = 1;
         this.room_id = 1;
-
-        this.formElem = document.querySelector("#user_data_form");
     }
 
     _getCredentials() {
@@ -56,7 +56,11 @@ export class SignUpForm {
     }
 
     hideForm() {
-        this.formElem.style.display = "none";
-        document.querySelector(".container").style.display = "";
+        this.modalHTML.style.display = "none";
+    }
+
+    showUserCreated() {
+        this.hideForm();
+        this.userCreatedHTML.style.display = "block";
     }
 }

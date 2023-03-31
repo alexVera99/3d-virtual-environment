@@ -180,6 +180,10 @@ input[class=log], input[type=password] {
     color: #f44336;
     display: none;
   }
+
+  .sign-up-success {
+    color: #0f9329;
+  }
   
   span.psw {
     float: right;
@@ -269,4 +273,3 @@ input[class=log], input[type=password] {
   }
 
 
-  
