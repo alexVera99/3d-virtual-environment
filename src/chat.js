@@ -95,7 +95,18 @@ export class Chat {
             console.log("received message: " + message);
 
             this.chatHelper.addMessage(username, room_id, message);
+        }
 
+        else if(msg["type"] == AppProtocol.streamIdPayload.type) {
+            const data = AppProtocol.parseStreamIdPayload(msg);
+
+            const stream_id = data["stream_id"];
+
+            console.log(stream_id);
+
+            if(this.on_stream_id) {
+                this.on_stream_id(stream_id);
+            }
         }
     }
     onUserConnected(user_data) {
@@ -115,11 +126,7 @@ export class Chat {
         msg
        )
 
-       const token = this.loginManager.getToken();
-       payload.token = token;
-
        this.sendMessageToServer(payload);
-
     }
 
     onRequestUserAttitude() {
@@ -136,5 +143,10 @@ export class Chat {
         if(this.on_new_users_attitude) {
             this.on_new_users_attitude(rooms_data);
         }
+    }
+    sendStreamIdToServer(id) {
+        const payload = AppProtocol.composeStreamIdPayload(id);
+
+        this.sendMessageToServer(payload);
     }
 }

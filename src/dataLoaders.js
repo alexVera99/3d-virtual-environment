@@ -49,7 +49,7 @@ export class DataLoader {
         var room_id = user.room_id;
 
         this.world.addUser(user, room_id);
-        this.scene.loadScene();
+        this.scene.addUserToScene(user);
     }
 
     loadRoomInfo(users) {
@@ -68,7 +68,7 @@ export class DataLoader {
 
     updateUserDisconnected(user_id) {
         this.world.removeUser(user_id);
-        this.scene.loadScene();
+        this.scene.removeUser(user_id);
     }
 
     updateUsersAttitude(rooms) {

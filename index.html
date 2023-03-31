@@ -12,14 +12,19 @@
 
         <div class="container" style="display: none;">
             <div class="canvas-container" id="canvas"></div>
-            <button class="std-button" id = "cam-btn" value = "free-cam" >Free Camera Off</button>
-            <button class="std-button" id = "open-btn" value = "open" >Chat</button>
+            <button id = "cam-btn" value = "free-cam" >Free Camera Off</button>
+            <button id = "open-btn" value = "open" >Chat</button>
+            <button id = "stream-btn" style="display: none;">Stream</button>
             <div class="chat" style=" display: none;">
             <button type="button" value ="close" class="cancel-btn">Close</button>
 			<div class="messages">
 			</div>
 			<input type="text" class="chat-input" placeholder="Type a message...">
 			<button id="send-btn" value="send-msg">Send</button>
+            <div>
+                <video id="me" autoplay width=400 style="display: none;"></video>
+                <video id="other" autoplay width=400 style="display: none;"></video>
+            </div>
 		</div>
         </div>     
 
@@ -91,6 +96,7 @@ window.onclick = function(event) {
 </script>
     
     </body>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
     <script type="text/javascript" src="src/extra/gl-matrix-min.js"></script>
 	<script type="text/javascript" src="src/extra/litegl.js"></script>
 	<script type="text/javascript" src="src/extra/rendeer.js"></script>
