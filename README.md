@@ -1,4 +1,4 @@
-# Description
+# Beyond Performance Music (BPM) Arena
 Have you ever wanted to go to a concert but you couldn't because the artist
 was only performing the US tour? Or, because it was too far or, let's be
 honest, you didn't have the money...
